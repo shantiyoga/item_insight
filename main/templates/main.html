@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Table</title>
+
+    <style>
+        body {
+            margin-top: 30px;
+        }
+
+        .data-app {
+            text-align: center
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ccc;
+        }
+
+        th {
+            background-color: #F2B6A8; /* Pastel Red */
+        }
+
+        tr:nth-child(even) {
+            background-color: #B6E0F2; /* Pastel Blue */
+        }
+
+        tr:nth-child(odd) {
+            background-color: #F2EAB6; /* Pastel Yellow */
+        }
+    </style>
+</head>
+<body>
+    <div class="data-app">
+        <h1>Item Insight</h1>
+        <h3>Shanti Yoga Rahayu</h3>
+        <h3>2206082360</h3>
+    </div>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Add table rows with data here -->
+            <tr>
+                <td>{{ name }}</td>
+                <td>{{ amount }}</td>
+                <td>{{ description }}</td>
+                <td>{{ price }}</td>
+                <td>{{ category }}</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
