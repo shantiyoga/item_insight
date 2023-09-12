@@ -251,5 +251,5 @@ class ItemStore(models.Model):
 
 4. Jalankan perintah `python manage.py migrate`.`migrate` akan mengaplikasikan perubahan model yang tercantum dalam berkas migrasi ke basis data.
 
-> [!CAUTION]
+> [!IMPORTANT]
 > Setiap kali melakukan perubahan pada model, seperti menambahkan atau mengubah atribut, perlu melakukan migrasi untuk merefleksikan perubahan tersebut.
