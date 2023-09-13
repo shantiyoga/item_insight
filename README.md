@@ -245,7 +245,6 @@ class ItemStore(models.Model):
     amount = models.IntegerField()
     description = models.TextField()
     price = models.BigIntegerField()
-    color = models.CharField(max_length=255)
     category = models.CharField(max_length=255)
 ```
 
