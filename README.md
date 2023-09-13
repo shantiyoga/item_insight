@@ -226,6 +226,9 @@ INSTALLED_APPS = [
 ]
 ```
 
+> [!NOTE]
+> Proses routing dijelaskan sekaligus di bawah.
+
 ## **Membuat Model Pada Aplikasi `Main` dengan Nama Item dan Memiliki Atribut**
 1. Buka berkas `models.py` pada direktori aplikasi `main`.
 2. Ubah file `models.py` yang terdapat di dalam direktori aplikasi `main` tersebut untuk mendefinisikan model dengan nama `ItemStore` dan memiliki atribut wajib sebagai berikut.
@@ -291,6 +294,35 @@ app_name = 'main'
 
 urlpatterns = [
     path('', show_item, name='show_item'),
+]
+```
+## **Melakukan Routing Pada Proyek agar Dapat Menjalankan Aplikasi `main`**
+Agar aplikasi yang dibuat dapat dijalankan, diperlukan konfigurasi routing proyek. 
+1. Buka berkas `urls.py` di dalam direktori proyek. 
+2. Tambahkan rute yang mengarah ke aplikasi tersebut di dalam file `urls.py` yang berada di dalam direktori proyek.
+```
+"""
+URL configuration for inventory_app project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/4.2/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path, include
+
+urlpatterns = [
+    path('admin/', admin.site.urls),
+    path('main/', include('main.urls')),
 ]
 ```
 
@@ -362,7 +394,7 @@ Controll mewakili komponen yang membangun hubungan antara Model dan View dengan 
 
 ###  MVT (Model-View-Template)
 #### Model
-Model mewakili komponen yang mengakses dan mengelola data. Komponen ini berhubungan langsung dengan database dan bertanggung jawab untuk memelihara seluruh data aplikasi termasuk menentukan struktur data dan menyediakan berbagai mekanisme untuk menambah, memperbarui, membaca dan menghapus data dalam database. .
+Model mewakili komponen yang mengakses dan mengelola data. Komponen ini berhubungan langsung dengan database dan bertanggung jawab untuk memelihara seluruh data aplikasi termasuk menentukan struktur data dan menyediakan berbagai mekanisme untuk menambah, memperbarui, membaca dan menghapus data dalam database.
 #### View
 View mewakili komponen pengendali yang menerima permintaan HTTP, memprosesnya, dan mengembalikan respons HTTP. View mengambil data yang diperlukan untuk memenuhi permintaan menggunakan Model dan menampilkannya di antarmuka pengguna menggunakan Template. Komponen ini juga berperan dalam menciptakan halaman HTML menggunakan template HTML secara dinamis dan mengisinya dengan data yang diambil dari Model.
 #### Template
