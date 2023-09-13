@@ -267,11 +267,11 @@ from django.shortcuts import render
 
 def show_item(request):
     context = {
-        'name': 'Pink Diamond Necklace',
-        'amount': 21,
-        'description': 'A Pink Diamond Necklace meticulously crafted with rare, natural pink diamonds, showcasing exquisite elegance and luxury.',
-        'price': 2900,
-        'category':'Necklace'
+        'name': 'Peony',
+        'amount': 52,
+        'description': 'The peony is a lush and extravagant flowering plant known for its large, fragrant, and beautifully layered blooms in a variety of colors, making it a symbol of romance and prosperity.',
+        'price': 57000,
+        'category':'Flowers'
     }
 
     return render(request, 'main.html', context)
