@@ -306,7 +306,7 @@ urlpatterns = [
 9. Masukkan nama aplikasi yang nantinya juga akan menjadi nama domain situs web aplikasi sesuai keinginan.
 10. Centang bagian `HTTP Listener on PORT` dan tekan tombol `Deploy App` untuk memulai proses *deployment* aplikasi.
 
-## **Bonus**: 8Testing*
+## **Bonus: Testing**
 Buat testing tambahan pada file `tests.py`.
 ```python
 from django.test import TestCase, Client
@@ -319,7 +319,7 @@ class mainTest(TestCase):
     def test_main_using_main_template(self):
         response = Client().get('/main/')
         self.assertTemplateUsed(response, 'main.html')
-
+````
 
 ## **Bagan Client Request and Response - Django**
 ![alt-text](image/DjangoClientRequestandResponse.png)
