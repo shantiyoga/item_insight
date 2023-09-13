@@ -7,7 +7,7 @@ def show_item(request):
         'amount': 52,
         'description': 'The peony is a lush and extravagant flowering plant known for its large, fragrant, and beautifully layered blooms in a variety of colors, making it a symbol of romance and prosperity.',
         'price': 57000,
-        'category':'Flowers'
+        'category':'Flower'
     }
 
     return render(request, 'main.html', context)

@@ -302,7 +302,7 @@ Agar aplikasi yang dibuat dapat dijalankan, diperlukan konfigurasi routing proye
 2. Tambahkan rute yang mengarah ke aplikasi tersebut di dalam file `urls.py` yang berada di dalam direktori proyek.
 ```
 """
-URL configuration for inventory_app project.
+URL configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/4.2/topics/http/urls/
@@ -339,7 +339,7 @@ urlpatterns = [
 10. Centang bagian `HTTP Listener on PORT` dan tekan tombol `Deploy App` untuk memulai proses *deployment* aplikasi.
 
 ## **Bonus: Testing**
-Buat testing tambahan pada file `tests.py`.
+1. Buat file testing tambahan pada file `tests.py`.
 ```python
 from django.test import TestCase, Client
 
@@ -351,10 +351,56 @@ class mainTest(TestCase):
     def test_main_using_main_template(self):
         response = Client().get('/main/')
         self.assertTemplateUsed(response, 'main.html')
-````
+
+    def test_item_store_create(self):
+        item = ItemStore.objects.create(
+            name= 'Peony',
+            amount= 52,
+            description= 'The peony is a lush and extravagant flowering plant known for its large, fragrant, and beautifully layered blooms in a variety of colors, making it a symbol of romance and prosperity.',
+            price= 57000,
+            category='Flower',
+        )
+        self.assertEqual(item.name, 'Peony')
+        self.assertEqual(item.amount, 52)
+        self.assertEqual(item.description, 'The peony is a lush and extravagant flowering plant known for its large, fragrant, and beautifully layered blooms in a variety of colors, making it a symbol of romance and prosperity.',)
+        self.assertEqual(item.price, 57000)
+        self.assertEqual(item.category, 'Flower')
+```
+2. Jalankan tes dengan menggunakan perintah berikut.
+```
+python manage.py test
+```
+3. Contoh dari *unit testing* yang berhasil dilakukan sebagai berikut.
+
+```
+Found 3 test(s).                                 
+Creating test database for alias 'default'...
+System check identified no issues (0 silenced).
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.055s
+
+OK
+Destroying test database for alias 'default'...```
+```
+
+Berikut penjelasan singkat tentang terkait kode tersebut:
+
+1. `test_main_url_is_exist`:
+   - Fungsi ini bertujuan untuk memeriksa apakah URL `/main/` dalam aplikasi Anda dapat diakses dengan benar (status code 200). 
+   - Langkah-langkah yang digunakan adalah dengan membuat objek `Client()` yang digunakan untuk membuat permintaan HTTP simulasi, menggunakan objek `Client()` untuk melakukan permintaan GET ke URL `/main/`, dan memeriksa apakah respons dari permintaan tersebut memiliki status kode 200 (OK).
+
+2. `test_main_using_main_template`:
+   - Fungsi ini bertujuan untuk memastikan bahwa saat mengakses URL `/main/`, template yang digunakan adalah `main.html`. Langkah-langkah yang digunakan adalah membuat objek `Client()` yang digunakan untuk membuat permintaan HTTP simulasi, menggunakan objek `Client()` untuk melakukan permintaan GET ke URL `/main/`, dan memeriksa apakah template yang digunakan dalam respons sesuai dengan `main.html`.
+
+3. `test_item_store_creation`:
+   - Fungsi ini bertujuan untuk menguji pembuatan objek `ItemStore` dengan nilai-nilai yang ditentukan.
+   - Langkah-langkah yang digunakan adalah membuat objek `ItemStore` dengan atribut-atribut yang telah ditentukan seperti `name`, `amount`, `description`, `price`, dan `category`. Langkah selanjutnya adalah memeriksa apakah atribut-atribut objek `ItemStore` sesuai dengan nilai-nilai yang telah diatur.
+
+*Unit test* ini dapat digunakan untuk memastikan bahwa URL `/main/` dapat diakses dengan benar, bahwa template `main.html` digunakan, dan bahwa objek `ItemStore` dapat dibuat dengan benar sesuai dengan nilai-nilai yang diinginkan. *Unit testing* berguna untuk memastikan bahwa kode yang dibuat dapat berfungsi dengan benar dan menghindari adanya bug yang tidak terdeteksi.
 
 ## **Bagan Client Request and Response - Django**
-![alt-text](image/DjangoClientRequestandResponse.png)
+![alt-text](assets/DjangoClientRequestandResponse.png)
 Berikut ini adalah penjelasan bagan di atas:
 1. Pengguna *(client)* membuka peramban web untuk mengunjungi situs web.
 2. Pengguna *(client)* masuk ke situs web dan *web server* melayani permintaan *(request)* dari pengguna *(client)*.
