@@ -1,3 +1,7 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +26,7 @@
 
         th, td {
             padding: 10px;
-            text-align: left;
+            text-align: center;
             border: 2px solid black; /* Add a border to the th and td elements */
         }
 
@@ -36,6 +40,14 @@
 
         tr:nth-child(odd) {
             background-color: #ffd7e7; /* Light Pink */
+        }
+
+        button {
+            margin: 20px auto;
+            padding: 10px 10px;
+            border-radius: 10px;
+            border: 2px solid pink;
+            display: block;
         }
     </style>
 </head>
@@ -59,14 +71,24 @@
         </thead>
         <tbody>
             <!-- Add table rows with data here -->
+            {% for item in items_list %}
             <tr>
-                <td>{{ name }}</td>
-                <td>{{ amount }}</td>
-                <td>{{ description }}</td>
-                <td>{{ price }}</td>
-                <td>{{ category }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.amount }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.category }}</td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
+
+    <a href="{% url 'main:create_product' %}">
+        <button>
+            Add New Product
+        </button>
+    </a>
 </body>
 </html>
+
+{% endblock content %}
