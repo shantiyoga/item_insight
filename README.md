@@ -477,6 +477,7 @@ ViewModel adalah komponen penghubung antara View dan Model. ViewModel di MVVM be
 
 
 ## **Referensi**
+https://pbp-fasilkom-ui.github.io/ganjil-2024/ <br/>
 https://www.geeksforgeeks.org/python-virtual-environment/<br/>
 https://csguide.cs.princeton.edu/software/virtualenv#:~:text=In%20a%20nutshell%2C%20Python%20virtual,or%20used%20by%20other%20projects.<br/>
 https://realpython.com/python-virtual-environments-a-primer/<br/>
@@ -490,5 +491,358 @@ https://www.educative.io/answers/what-is-mvt-structure-in-django<br/>
 https://www.askpython.com/django/django-mvt-architecture<br/>
 https://books.zkoss.org/zk-mvvm-book/8.0/introduction_of_mvvm.html<br/>
 https://www.thirdrocktechkno.com/blog/architecture-presentation-patterns-mvc-vs-mvp-vs-mvvm/<br/>
+<br/>
+
+# **Tugas 3: Implementasi Form dan Data Delivery pada Django**<br/>
+
+## **Penjelasan Cara Implementasi Checklist secara Step-by-Step**
+
+## Membuat Input Form untuk Menambahkan Objek Model pada App Sebelumnya
+### 1. Atur Routing dari `main/` ke `/`
+1. Atur routing `main/` menjadi `/` sehingga dapat langsung mengakses halaman utama tanpa menerima pesan `404 error` jika tidak menambahkan `/main/` secara manual pada URL dengan cara membuka berkas `urls.py` yang ada pada folder inventory_app dan modifikasi path `main/` menjadi `''` pada `urlpatterns` sebagai berikut.
+```python
+urlpatterns = [
+    path('', include('main.urls')),
+    path('admin/', admin.site.urls),
+]
+```
+### 2. Implementasi Skeleton sebagai Kerangka Views
+Buatlah *skeleton* yang berfungsi sebagai kerangka `views`` dari situs web yang akan dibuat untuk menjaga konsistensi dalam desain situs web dan memperkecil kemungkinan terjadinya redudansi kode dengan langkah-langkah sebagai berikut.
+
+1. Buat folder `templates` pada *root folder* dan buat sebuah berkas baru dengan format HTML bernama `base.html` yang digunakan sebagai *template* dasar secara umum untuk halaman web lain yang terdapat ada dalam proyek. Tuliskan kode berikut sebagai isi dari file `base.html`.
+```
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+        />
+        {% block meta %}
+        {% endblock meta %}
+    </head>
+
+    <body>
+        {% block content %}
+        {% endblock content %}
+    </body>
+</html>
+```
+
+2. Buka berkas settings.py yang terdapat di dalam subdirektori `inventory_app`. Perhatikan baris yang mengandung `TEMPLATES` dan modifikasi dengan menambahkan potongan kode berikut:
+
+```
+...
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS': [BASE_DIR / 'templates'], # Tambahkan kode ini
+        'APP_DIRS': True,
+        ...
+    }
+]
+...
+```
+3. Buka berkas `main.html` yang terdaat dalam subdirektori `templates` di dalam direktori main. Modifikasi kode yang terdapat pada berkas `main.html` untuk meng-extend dari base.html yang sebelumnya telah dibuat.
+```
+{% extends 'base.html' %}
+
+{% block content %}
+    ...
+    <!-- Kode dalam berkas main.html yang telah dibuat sebelumnya -->
+    ...
+{% endblock content %}
+```
+
+### 3. Membuat Form Input Data dan Menampilkan Data pada HTML
+Buat sebuah form sederhana yang akan digunakan untuk meng-*input* data item pada aplikasi agar data baru dapat ditambahkan dan ditampilkan pada halaman utama dengan langkah-langkah berikut.
+
+1. Buat berkas baru bernama forms.py pada direktori main yang nantinya digunakan untuk menerima data item baru. Masukkan kode berikut ini sebagai isi dari berkas `forms.py`:
+```
+from django.forms import ModelForm
+from main.models import ItemStore
+
+class ProductForm(ModelForm):
+    class Meta:
+        model = ItemStore
+        fields = ["name", "amount", "price", "category", "description"]
+```
+`model = ItemStore` menunjukkan model yang digunakan untuk form, sedangkan `fields = ["name", "amount", "price", "category", "description"]`` menunjukkan field dari model ItemStore yang digunakan untuk form. 
+
+2. Buka berkas `views.py` yang terdapat dalam folder `main` dan import berikut pada bagian paling atas.
+```
+from django.http import HttpResponseRedirect
+from main.forms import ProductForm
+from main.models import ItemStore
+from django.urls import reverse
+```
+
+3. Modifikasi file views.py pada direktori main dengan menambahkan fungsi baru bernama `create_product` yang menerima parameter `request`` untuk menghasilkan formulir yang dapat menambahkan data produk secara otomatis ketika data disubmit dari form sebagai berikut.
+```
+def create_product(request):
+    form = ProductForm(request.POST or None)
+
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_item'))
+
+    context = {'form': form}
+    return render(request, "create_product.html", context)
+
+```
+
+4. Modifikasi fungsi `show_item` yang sudah terdapat dalam file `views.py` sehingga menjadi kode sebagai berikut.
+```
+def show_item(request):
+    items = ItemStore.objects.all()
+    context = {
+        'creator' : 'Shanti Yoga Rahayu',
+        'id' : 2206082360,
+        'class' : 'PBP D',
+        'items_list': items
+    }
+
+    return render(request, 'main.html', context)
+```
+
+5. Buka berkas `urls.py` yang terdapat dalam direktori `main` dengan meng-*import* fungsi `create_product` yang sebelumnya telah dibuat.
+```
+from main.views import show_main, create_product
+```
 
 
+6. Modifikasi kode yang terdapat dalam berkas `urls.py`dengan menambahkan path URL data form ke dalam urlpatterns pada `urls.py` di dalam direktori `main` sehingga dapat mengakses fungsi yang sebelumnya sudah di-*import* sebagai berikut.
+```
+path('create-product', create_product, name='create_product'),
+```
+
+7. Buat berkas HTML baru dengan nama `create_product.html` pada direktori `main/templates` dan masukan kode berikut dalam berkas tersebut:
+```
+{% extends 'base.html' %} 
+
+{% block content %}
+<h1>Add New Product</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        {{ form.as_table }}
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" value="Add Product"/>
+            </td>
+        </tr>
+    </table>
+</form>
+
+{% endblock %}
+```
+
+8. Buka berkas `main.html` yang terdapat dalam direktori `main/templates` dan tambahkan kode berikut dalam `{% block content %}` untuk menampilkan data item dalam bentuk tabel serta tombol yang akan *redirect* ke halaman *form*.
+```
+...
+ <div class="data-app">
+        <h1>Item Insight</h1>
+        <h3>{{ creator }}</h3>
+        <h3>{{ id }}</h3>
+        <h3>{{ class }}</h3>
+        
+    </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Add table rows with data here -->
+            {% for item in items_list %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.amount }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.category }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'main:create_product' %}">
+        <button>
+            Add New Product
+        </button>
+    </a>
+</body>
+</html>
+
+{% endblock content %}
+
+```
+9. Jalankan proyek Django dengan perintah python `manage.py runserver`. Kemudian, buka http://localhost:8000 pada browser web dan tambahkan beberapa data item baru pada halaman utama aplikasi untuk mengecek apakah *form input* telah berfungsi dengan baik.
+
+
+## **Nenambahkan 5 Fungsi `views` untuk Melihat Objek yang Sudah Ditambahkan dalam Format HTML, XML, JSON, XML by ID, dan JSON by ID**
+1. Buka `views.py` yang terdapat dalam direktori `main`. Kemudian, modifikasi fungsi `show_item` yang sudah terdapat dalam file `views.py` sehingga menjadi kode sebagai berikut.
+```
+def show_item(request):
+    items = ItemStore.objects.all()
+    context = {
+        'creator' : 'Shanti Yoga Rahayu',
+        'id' : 2206082360,
+        'class' : 'PBP D',
+        'items_list': items
+    }
+
+    return render(request, 'main.html', context)
+```
+2. Tambahkan *import* `HttpResponse` dan `Serializer` sebagai berikut pada bagian kode paling atas. 
+
+```
+from django.http import HttpResponse
+from django.core import serializers
+```
+3. Buat sebuah fungsi baru bernama `show_xml` dengan parameter `request` dan memiliki sebuah variabel yang menyimpan hasil *query* dari data. Selanjutnya, tambahkan return function `HttpResponse` dengan parameter data hasil *query* yang telah diserialisasi menjadi XML. Berikut kode dari fungsi tersebut.
+```
+def show_xml(request):
+    data = ItemStore.objects.all()
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+```
+4. Buat sebuah fungsi baru bernama `show_json` dengan parameter `request` dan memiliki sebuah variabel yang menyimpan hasil *query* dari data. Selanjutnya, tambahkan return function `HttpResponse` dengan parameter data hasil *query* yang telah diserialisasi menjadi JSON. Berikut kode dari fungsi tersebut.
+```
+def show_json(request):
+    data = ItemStore.objects.all()
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+```
+5. Buat sebuah fungsi baru dengan nama `show_xml_by_id` yang menerima parameter `request` dan `id` yang memiliki sebuah variabel yang menyimpan hasil *query* dari data dengan id tertentu.  Selanjutnya, tambahkan return function berupa HttpResponse yang berisi parameter data hasil query yang sudah diserialisasi menjadi XML. Berikut kode dari fungsi tersebut.
+```
+def show_xml_by_id(request, id):
+    data = ItemStore.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("xml", data), content_type="application/xml")
+
+```
+
+6. Buat sebuah fungsi baru dengan nama `show_json_by_id` yang menerima parameter `request` dan `id` yang memiliki sebuah variabel yang menyimpan hasil *query* dari data dengan id tertentu.  Selanjutnya, tambahkan return function berupa HttpResponse yang berisi parameter data hasil query yang sudah diserialisasi menjadi JSON. Berikut kode dari fungsi tersebut.
+```
+def show_json_by_id(request, id):
+    data = ItemStore.objects.filter(pk=id)
+    return HttpResponse(serializers.serialize("json", data), content_type="application/json")
+```
+## **Membuat Routing URL untuk Masing-Masing views yang Telah Ditambahkan Pada Poin 2 **
+1. Buka berkas `urls.py` yang terdapat dalam direktori `main`, kemudian *import* fungsi yang sudah dibuat pada poin 2, yaitu show_xml, show_json, show_xml_by_id, dan show_json_by_id.
+2. Modifikasi isi berkas `urls.py` dengan menambahkan *path url* yang di dalam `urlpatterns` untuk mengakses semua fungsi tersebut.
+
+Berikut adalah kode isi dari `urls.py` yang telah dimodifikasi:
+```
+from django.urls import path
+from main.views import show_item, create_product, show_xml, show_json, show_xml_by_id, show_json_by_id
+
+app_name = 'main'
+
+urlpatterns = [
+    path('', show_item, name='show_item'),
+    path('create-product', create_product, name='create_product'),
+    path('xml/', show_xml, name='show_xml'), 
+    path('json/', show_json, name='show_json'), 
+    path('xml/<int:id>/', show_xml_by_id, name='show_xml_by_id'),
+    path('json/<int:id>/', show_json_by_id, name='show_json_by_id'), 
+]
+```
+## Bonus: **Menambahkan Pesan di Atas Tabel Data**
+Tambahkan kode berikut ini sehingga ketika halaman web di-*render*, teks dalam elemen <p> akan menjadi pesan yang menampilkan nilai yang bergantung dengan jumlah item yang telah diisi.
+
+```
+...
+<div class="item-count">
+        <p>You have collected a total of {{ items_list|length }} item(s) in this application.</p>
+      </div>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Amount</th>
+                <th>Description</th>
+                <th>Price</th>
+                <th>Category</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Add table rows with data here -->
+            {% for item in items_list %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.amount }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.category }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+...
+```
+
+## **Perbedaan antara Form POST dan Form GET dalam Django**
+POST dan GET merupakan dua metode yang digunakan dalam melakukan *transfer* data antara *browser* dan server web saat mengirim informasi melalui form HTML. Metode POST digunakan untuk men-*transfer* data dari browser ke server web dengan tingkat keamanan yang lebih tinggi karena informasi dikirim sebagai bagian dari badan permintaan HTTP, sehingga data tersebut tidak terlihat oleh pengguna selama proses pengiriman. Sementara itu, metode GET mengirim informasi sebagai bagian dari URL, sehingga data tersebut dapat dilihat oleh siapa pun yang melihat URL tersebut. 
+
+Perbedaan lebih jelas antara kedua metode tersebut dapat dilihat pada tabel berikut:
+
+| Kriteria                 | Form POST                                              | Form GET                                               |
+|--------------------------|-------------------------------------------------------|--------------------------------------------------------|
+| Jenis Request            | Mengirim data ke server dalam tubuh permintaan HTTP   | Mengirim data ke server melalui URL                   |
+| Keamanan                | Lebih aman karena data tidak terlihat di URL         | Kurang aman karena data terlihat di URL               |
+| Panjang Data             | Tidak ada batasan panjang data yang dapat dikirimkan  | Batasan panjang data yang dapat dikirimkan oleh URL   |
+| Penggunaan              | Digunakan untuk mengirim data sensitif seperti kata sandi atau data yang akan dimasukkan ke dalam database | Digunakan untuk permintaan yang bersifat idempoten (tidak mengubah data) atau permintaan yang dapat di-bookmark |
+| Contoh Penggunaan       | Mengirimkan formulir pendaftaran dengan data pribadi  | Membaca parameter pencarian pada halaman hasil pencarian |
+| Implementasi Django     | Menggunakan `request.POST` dalam Django             | Menggunakan `request.GET` dalam Django                |
+| Kecepatan Akses URL     | Lebih lambat karena data tersembunyi dalam tubuh permintaan HTTP | Lebih cepat karena data terletak dalam URL dan dapat diakses langsung |
+| Penanganan Data Ganda   | Dapat mengatasi data ganda dengan baik                | Tidak dapat mengatasi data ganda dengan baik          |
+
+
+## **Perbedaan Utama antara XML, JSON, dan HTML dalam Konteks Pengiriman Data**
+Perbedaan utama antara ketiga format yang digunakan dalam konteks pengiriman data tersebut adalah XML digunakan untuk representasi data hierarkis dan terstruktur, JSON untuk pertukaran data data antar aplikasi yang biasanya mudah dibaca oleh manusia, dan HTML untuk pembuatan tampilan halaman web.
+
+Perbedaan lebih jelas antara kedua metode tersebut dapat dilihat pada tabel berikut:
+| Kriteria                   | XML                                    | JSON                                    | HTML                                |
+|----------------------------|----------------------------------------|----------------------------------------|-------------------------------------|
+| Tujuan Utama               | Representasi data hierarkis            | Pertukaran data antar aplikasi         | Membuat konten web                  |
+| Struktur Data              | Struktur hierarkis yang menggunakan tag | Struktur data yang berbasis objek     | Struktur dokumen tata letak web     |
+| Keterbacaan               | Tidak terlalu mudah dibaca oleh manusia | Mudah dibaca oleh manusia             | Tidak terlalu mudah dibaca oleh manusia |
+| Ukuran Data               | Lebih besar karena menggunakan tag     | Lebih kecil karena format ringkas     | Lebih kecil karena fokus pada tampilan |
+| Pemrosesan Data           | Memerlukan pemrosesan untuk ekstraksi dan manipulasi data | Memerlukan pemrosesan untuk ekstraksi dan manipulasi data | Pemrosesan oleh peramban web       |
+| Penggunaan Utama          | Konfigurasi, penyimpanan, dan pertukaran data berstruktur | Pertukaran data antar aplikasi, API web | Membuat halaman web                  |
+| Contoh Penggunaan         | Konfigurasi file, data berbasis markup | Pertukaran data antar server dan klien dan RESTful API | Pembuatan halaman web dan tampilan konten |
+
+## **Alasan JSON Sering Digunakan dalam Pertukaran Data antara Aplikasi Web Modern?**
+JSON (JavaScript Object Notation) sering digunakan dalam pertukaran data antara aplikasi web modern karena memiliki format yang ringkas dan mudah dibaca oleh manusia, yang membuatnya sangat mudah dipahami oleh pengembang dan memudahkan mereka untuk memeriksa data. JSON bekerja dengan baik dengan bahasa pemrograman yang berbasis objek, seperti JavaScript, Python, dan banyak bahasa lainnya sehingga memungkinkan aplikasi untuk mengonversi data ke objek dalam memori dengan mudah dan kompatibel dengan berbagai platform dan sistem operasi. Kemampuan JSON untuk mendukung struktur data yang bersarang *(nested)* memungkinkan representasi data yang kompleks dan hierarkis. Selain itu, JSON juga telah menjadi standar de facto untuk API web RESTful, yang merupakan fondasi banyak aplikasi web modern sehingga memudahkan interoperabilitas dan pertukaran data antar aplikasi secara luas. 
+
+## **Mengakses Kelima URL di Poin 2 Menggunakan Postman dan Membuat Screenshot dari Hasil Akses URL Pada Postman**
+1. Jalankan proyek Django dengan perintah `python manage.py runserver`.
+2. Buka Postman dan buat sebuah request baru dengan method `GET` dengan beberapa url untuk mengetes apakah data terkirimkan dengan baik.
+### HTML (http://localhost:8000)
+![alt-text](assets/html.png)
+### XML (http://localhost:8000/xml)
+![alt-text](assets/xml.png)
+### JSON (http://localhost:8000/json)
+![alt-text](assets/json.png)
+### XML by ID (http://localhost:8000/xml/[id])
+![alt-text](assets/xml_by_id.png)
+### JSON by ID (http://localhost:8000/json/[id])
+![alt-text](assets/json_by_id.png)
+
+
+## **Referensi**
+https://pbp-fasilkom-ui.github.io/ganjil-2024/ <br/>
+https://blog.finxter.com/get-post-in-django-made-easy/<br/>
+https://docs.djangoproject.com/en/4.2/topics/forms/#:~:text=GET%20and%20POST%20are%20typically,the%20state%20of%20the%20system. <br/>
+https://medium.com/@oazzat19/what-is-the-difference-between-html-vs-xml-vs-json-254864972bbb <br/>
+https://www.deltaxml.com/blog/xml/whats-the-relationship-between-xml-json-html-and-the-internet/ <br/>
+https://thenewstack.io/why-fast-json-analytics-is-foundational-for-modern-web-apps/ <br/>

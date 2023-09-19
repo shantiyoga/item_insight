@@ -10,6 +10,17 @@
     <title>Inventory Table</title>
 
     <style>
+        .item-count {
+          background-color: #ffe2ec;
+          color: black;
+          font-weight: bold;
+          border: 2px solid #f675a9;
+          border-radius: 20px;
+          padding: 5px;
+          margin: 20px auto;
+          max-width: 390px;
+        }
+
         body {
             margin-top: 30px;
         }
@@ -59,6 +70,9 @@
         <h3>{{ class }}</h3>
         
     </div>
+    <div class="item-count">
+        <p>You have collected a total of {{ items_list|length }} item(s) in this application.</p>
+      </div>
     <table>
         <thead>
             <tr>
@@ -83,7 +97,7 @@
         </tbody>
     </table>
 
-    <a href="{% url 'main:create_product' %}">
+    <a href="{% url 'main:create_product' %}" style="text-decoration: none;">
         <button>
             Add New Product
         </button>
