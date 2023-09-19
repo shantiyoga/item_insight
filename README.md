@@ -755,12 +755,12 @@ urlpatterns = [
 ]
 ```
 ## **Bonus: Menambahkan Pesan di Atas Tabel Data**
-Tambahkan kode berikut ini sehingga ketika halaman web di-*render*, teks dalam elemen <p> akan menjadi pesan yang menampilkan nilai yang bergantung dengan jumlah item yang telah diisi.
+Tambahkan kode berikut ini sehingga ketika halaman web di-*render*, teks dalam elemen akan menjadi pesan yang menampilkan nilai yang bergantung dengan jumlah item yang telah diisi.
 
 ```
 ...
 <div class="item-count">
-        <p>You have collected a total of {{ items_list|length }} item(s) in this application.</p>
+        <p>Exquisite collection of {{ items_list|length }} floral item(s) stored in this app.</p>
       </div>
     <table>
         <thead>
