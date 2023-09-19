@@ -495,9 +495,7 @@ https://www.thirdrocktechkno.com/blog/architecture-presentation-patterns-mvc-vs-
 
 # **Tugas 3: Implementasi Form dan Data Delivery pada Django**<br/>
 
-## **Penjelasan Cara Implementasi Checklist secara Step-by-Step**
-
-## Membuat Input Form untuk Menambahkan Objek Model pada App Sebelumnya
+## **Membuat Input Form untuk Menambahkan Objek Model pada App Sebelumnya**
 ### 1. Atur Routing dari `main/` ke `/`
 1. Atur routing `main/` menjadi `/` sehingga dapat langsung mengakses halaman utama tanpa menerima pesan `404 error` jika tidak menambahkan `/main/` secara manual pada URL dengan cara membuka berkas `urls.py` yang ada pada folder inventory_app dan modifikasi path `main/` menjadi `''` pada `urlpatterns` sebagai berikut.
 ```python
@@ -689,7 +687,7 @@ path('create-product', create_product, name='create_product'),
 9. Jalankan proyek Django dengan perintah python `manage.py runserver`. Kemudian, buka http://localhost:8000 pada browser web dan tambahkan beberapa data item baru pada halaman utama aplikasi untuk mengecek apakah *form input* telah berfungsi dengan baik.
 
 
-## **Nenambahkan 5 Fungsi `views` untuk Melihat Objek yang Sudah Ditambahkan dalam Format HTML, XML, JSON, XML by ID, dan JSON by ID**
+## **Menambahkan 5 Fungsi `views` untuk Melihat Objek yang Sudah Ditambahkan dalam Format HTML, XML, JSON, XML by ID, dan JSON by ID**
 1. Buka `views.py` yang terdapat dalam direktori `main`. Kemudian, modifikasi fungsi `show_item` yang sudah terdapat dalam file `views.py` sehingga menjadi kode sebagai berikut.
 ```
 def show_item(request):
@@ -736,7 +734,7 @@ def show_json_by_id(request, id):
     data = ItemStore.objects.filter(pk=id)
     return HttpResponse(serializers.serialize("json", data), content_type="application/json")
 ```
-## **Membuat Routing URL untuk Masing-Masing views yang Telah Ditambahkan Pada Poin 2 **
+## **Membuat Routing URL untuk Masing-Masing views yang Telah Ditambahkan Pada Poin 2**
 1. Buka berkas `urls.py` yang terdapat dalam direktori `main`, kemudian *import* fungsi yang sudah dibuat pada poin 2, yaitu show_xml, show_json, show_xml_by_id, dan show_json_by_id.
 2. Modifikasi isi berkas `urls.py` dengan menambahkan *path url* yang di dalam `urlpatterns` untuk mengakses semua fungsi tersebut.
 
@@ -756,7 +754,7 @@ urlpatterns = [
     path('json/<int:id>/', show_json_by_id, name='show_json_by_id'), 
 ]
 ```
-## Bonus: **Menambahkan Pesan di Atas Tabel Data**
+## **Bonus: Menambahkan Pesan di Atas Tabel Data**
 Tambahkan kode berikut ini sehingga ketika halaman web di-*render*, teks dalam elemen <p> akan menjadi pesan yang menampilkan nilai yang bergantung dengan jumlah item yang telah diisi.
 
 ```
