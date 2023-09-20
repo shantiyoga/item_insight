@@ -832,9 +832,9 @@ JSON (JavaScript Object Notation) sering digunakan dalam pertukaran data antara 
 ### JSON (http://localhost:8000/json)
 ![alt-text](assets/json.png)
 ### XML by ID (http://localhost:8000/xml/[id])
-![alt-text](assets/xml_by_id.png)
+![alt-text](assets/xml_id.png)
 ### JSON by ID (http://localhost:8000/json/[id])
-![alt-text](assets/json_by_id.png)
+![alt-text](assets/json_id.png)
 
 
 ## **Referensi**
