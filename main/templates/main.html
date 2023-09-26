@@ -81,6 +81,9 @@
                 <th>Description</th>
                 <th>Price</th>
                 <th>Category</th>
+                <th>Add</th>
+                <th>Decrease</th>
+                <th>Remove</th>
             </tr>
         </thead>
         <tbody>
@@ -92,14 +95,39 @@
                 <td>{{ item.description }}</td>
                 <td>{{ item.price }}</td>
                 <td>{{ item.category }}</td>
+                <td>
+                    <form action="{% url 'main:increment' item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="Increment">Add</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'main:decrement' item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="Decrement">Decrease</button>
+                    </form>
+                </td>
+                <td>
+                    <form action="{% url 'main:remove' item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" name="Remove">Remove</button>
+                    </form>
+                </td>  
             </tr>
             {% endfor %}
         </tbody>
     </table>
 
+    <h5>Sesi terakhir login: {{ last_login }}</h5>
+
     <a href="{% url 'main:create_product' %}" style="text-decoration: none;">
         <button>
             Add New Product
+        </button>
+    </a>
+    <a href="{% url 'main:logout' %}">
+        <button>
+            Logout
         </button>
     </a>
 </body>

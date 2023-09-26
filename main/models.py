@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class ItemStore(models.Model):
@@ -7,3 +8,4 @@ class ItemStore(models.Model):
     description = models.TextField()   
     price = models.BigIntegerField()
     category = models.CharField(max_length=255)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
