@@ -1474,6 +1474,7 @@ Setelah berhasil mengubah kode, pastikan untuk menguji halaman web untuk memasti
 
 ### 2. Kustomisasi halaman register
 ![alt-text](assets/Register.png)
+
 Berikut ini adalah penjelasan kustomisasi halaman register.
 
 1. **Tambahkan CSS**<br/>
@@ -1653,6 +1654,9 @@ Setelah berhasil mengubah kode, pastikan untuk menguji halaman web untuk memasti
 
 ### 3. Kustomisasi Tambah Inventori
 ![alt-text](assets/AddItem.png)
+
+Berikut ini adalah penjelasan kustomisasi tambah inventori.
+
 1. **Tambahkan CSS**<br/>
 Tambahkan CSS ke dalam template untuk mengatur tampilan berbagai elemen, termasuk latar belakang, tampilan form, warna teks, dan lainnya.
 ```
@@ -1827,6 +1831,9 @@ Setelah berhasil mengubah kode, pastikan untuk menguji halaman web untuk memasti
 ### 4. Kustomisasi Halaman Daftar Inventori Menjadi Lebih Berwarna
 ![alt-text](assets/Bonus41.png)
 ![alt-text](assets/Bonus42.png)
+
+
+Berikut ini adalah penjelasan kustomisasi halaman daftar inventori.
 
 1. **Tambahkan CSS**<br/>
 Tambahkan `<style>` CSS ke dalam template untuk mengatur tampilan berbagai elemen, termasuk latar belakang, tampilan form, warna teks, dan lainnya.
