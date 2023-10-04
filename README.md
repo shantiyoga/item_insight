@@ -1305,6 +1305,7 @@ Dalam serangan CSRF, penyerang mencoba membuat pengguna yang telah terotentikasi
 
 ## **Kustomisasi desain pada template HTML yang telah dibuat pada Tugas 4**
 ### 1. Kustomisasi halaman login. 
+![alt-text](assets/Login.png)
 Berikut ini adalah penjelasan kustomisasi halaman login.
 
 1. **Tambahkan `<style>` CSS**<br/>
@@ -1472,6 +1473,7 @@ Sesuaikan kode HTML dan pastikan bahwa atribut dan class pada elemen-elemen HTML
 Setelah berhasil mengubah kode, pastikan untuk menguji halaman web untuk memastikan tampilan telah sesuai.
 
 ### 2. Kustomisasi halaman register
+![alt-text](assets/Register.png)
 Berikut ini adalah penjelasan kustomisasi halaman register.
 
 1. **Tambahkan CSS**<br/>
@@ -1650,7 +1652,7 @@ Sesuaikan kode HTML dan pastikan bahwa atribut dan class pada elemen-elemen HTML
 Setelah berhasil mengubah kode, pastikan untuk menguji halaman web untuk memastikan tampilan telah sesuai.
 
 ### 3. Kustomisasi Tambah Inventori
-
+![alt-text](assets/AddItem.png)
 1. **Tambahkan CSS**<br/>
 Tambahkan CSS ke dalam template untuk mengatur tampilan berbagai elemen, termasuk latar belakang, tampilan form, warna teks, dan lainnya.
 ```
@@ -1823,6 +1825,9 @@ Sesuaikan kode HTML dan pastikan bahwa atribut dan class pada elemen-elemen HTML
 Setelah berhasil mengubah kode, pastikan untuk menguji halaman web untuk memastikan tampilan telah sesuai.
 
 ### 4. Kustomisasi Halaman Daftar Inventori Menjadi Lebih Berwarna
+![alt-text](assets/Bonus41.png)
+![alt-text](assets/Bonus42.png)
+
 1. **Tambahkan CSS**<br/>
 Tambahkan `<style>` CSS ke dalam template untuk mengatur tampilan berbagai elemen, termasuk latar belakang, tampilan form, warna teks, dan lainnya.
 ```
