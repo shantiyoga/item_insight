@@ -2134,7 +2134,7 @@ Perbedaan warna pada category (baris paling bawah) dibanding baris lainnya dapat
 
 ## **Penjelasan Manfaat dari Setiap Element Selector dan Waktu yang Tepat untuk Menggunakannya**
 
-Setiap elemen selektor dalam CSS memiliki manfaat dan waktu yang tepat untuk menggunakannya tergantung pada kebutuhan desain dan konteks pengembangan web. Berikut adalah beberapa elemen selektor umum beserta penjelasan manfaat dan waktu yang tepat untuk menggunakannya:
+Setiap selektor dalam CSS memiliki manfaat dan waktu yang tepat untuk menggunakannya tergantung pada kebutuhan desain dan konteks pengembangan web. Berikut adalah beberapa selektor umum beserta penjelasan manfaat dan waktu yang tepat untuk menggunakannya:
 
 1. **Element Selector (`element`)**<br>
    Selector ini memungkinkan untuk menggambarkan semua elemen HTML dari jenis tertentu. Misalnya, `p` akan memilih semua elemen `<p>`, dan `h1` akan memilih semua elemen `<h1>`. Elemen selector tepat digunakan ketika ingin menerapkan gaya yang seragam ke semua elemen yang memiliki tipe yang sama dalam dokumen HTML.
