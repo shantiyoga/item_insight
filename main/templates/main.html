@@ -1,136 +1,219 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inventory Table</title>
-
+    <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Inventory Cards</title>
+     
     <style>
-        .item-count {
-          background-color: #ffe2ec;
-          color: black;
-          font-weight: bold;
-          border: 2px solid #f675a9;
-          border-radius: 20px;
-          padding: 5px;
-          margin: 20px auto;
-          max-width: 390px;
-        }
-
         body {
-            margin-top: 30px;
+            background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif; 
         }
 
+        .title-container {
+            text-align: center; 
+            margin: auto; 
+            margin-bottom : 30px;
+        }
+
+        .item-insight-title {
+            font-family: 'Poppins', sans-serif; 
+            font-size: 50px; 
+            font-weight: bold;
+            color: #bd014f; 
+            margin: 0; 
+}
+        
         .data-app {
-            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            line-height: 1.2; 
+            color: #8a093c;
+            margin-left: 100px;
+        }
+    
+        h3, p, h2 {
+            font-family: 'Poppins', sans-serif;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            border: 2px solid black; /* Add a border to the table */
-        }
+        .item-count-container {
+        width: 500px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.5);
+        padding: 5px 5px;
+        margin: auto;
+        justify-content: center;
+        border-radius: 10px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
 
-        th, td {
-            padding: 10px;
-            text-align: center;
-            border: 2px solid black; /* Add a border to the th and td elements */
+        .item-count {
+            font-weight: bold;
+            font-size: 16px; 
+            color: #ff0066; 
         }
-
-        th {
-            background-color: #f675a9; /* Pink */
+    
+        .item-cards {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
         }
-
-        tr:nth-child(even) {
-            background-color: #ffd7e7; /* Light Pink */
-        }
-
-        tr:nth-child(odd) {
-            background-color: #ffd7e7; /* Light Pink */
-        }
-
-        button {
-            margin: 20px auto;
-            padding: 10px 10px;
+    
+        .item-card {
+            width: 300px;
+            padding: 20px;
+            padding-bottom: 25px;
+            border: 2px solid #f675a9;
             border-radius: 10px;
-            border: 2px solid pink;
-            display: block;
+            background-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 8px rgba(46, 6, 26, 0.2);
+            transition: transform 0.2s;
         }
+
+        .item-category {
+            color: #831341; 
+        }
+
+        .item-category-value {
+             color: #831341; 
+        }
+
+        .item-card:hover {
+            transform: scale(1.05);
+        }
+    
+        .item-details {
+            text-align: left;
+            margin-top: 10px;
+        }
+    
+        .item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+    
+        .item-actions button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #dd3e7e;
+            color:aliceblue
+        }
+    
+        .item-actions button:hover {
+            background-color: #f675a9;
+            color: white;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 50px; 
+        }
+
+        .add-product-button {
+            text-decoration: none;
+            background-color: #fedeea;
+            font-size: 14px;
+            color: rgb(149, 12, 67);
+            font-weight: bold;
+            border-color: #dd3e7e;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-right: 10px; 
+            transition: background-color 0.2s;
+        }
+
+        .add-product-button:hover {
+            background-color: #fcc9db;
+        }
+
+        .logout-button {
+            text-decoration: none;
+            background-color: #ab124f;
+            color: white;
+            font-size: 14px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-left: 10px; 
+            transition: background-color 0.2s;
+        }
+
+        .logout-button:hover {
+            background-color: #660729;
+        }
+
+        .login-session {
+            font-weight: bold;
+            margin-left: 100px; 
+            color: #740936;
+}
     </style>
 </head>
+
 <body>
     <div class="data-app">
-        <h1>Item Insight</h1>
         <h3>{{ creator }}</h3>
         <h3>{{ id }}</h3>
         <h3>{{ class }}</h3>
-        
     </div>
-    <div class="item-count">
-        <p>Exquisite collection of {{ items_list|length }} floral item(s) stored in this app.</p>
-      </div>
-    <table>
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Amount</th>
-                <th>Description</th>
-                <th>Price</th>
-                <th>Category</th>
-                <th>Add</th>
-                <th>Decrease</th>
-                <th>Remove</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Add table rows with data here -->
-            {% for item in items_list %}
-            <tr>
-                <td>{{ item.name }}</td>
-                <td>{{ item.amount }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.price }}</td>
-                <td>{{ item.category }}</td>
-                <td>
-                    <form action="{% url 'main:increment' item.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name="Increment">Add</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="{% url 'main:decrement' item.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name="Decrement">Decrease</button>
-                    </form>
-                </td>
-                <td>
-                    <form action="{% url 'main:remove' item.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" name="Remove">Remove</button>
-                    </form>
-                </td>  
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-
-    <h5>Sesi terakhir login: {{ last_login }}</h5>
-
-    <a href="{% url 'main:create_product' %}" style="text-decoration: none;">
-        <button>
+    <div class="title-container">
+        <h1 class="item-insight-title">Item Insight</h1>
+    </div>
+    <div class="item-count-container">
+        <p class="item-count">Exquisite collection of {{ items_list|length }} floral item(s) stored in this app.</p>
+    </div>
+    
+    <div class="item-cards">
+        {% for item in items_list %}
+        <div class="item-card">
+            <h2>{{ item.name }}</h2>
+            <div class="item-details">
+                <p><strong>Amount:</strong> {{ item.amount }}</p>
+                <p><strong>Description:</strong> {{ item.description }}</p>
+                <p><strong>Price:</strong> {{ item.price }}</p>
+                <p><strong class="item-category">Category:</strong> <span class="item-category-value">{{ item.category }}</span></p>
+            </div>
+            <div class="item-actions">
+                <form action="{% url 'main:increment' item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Increment">Add</button>
+                </form>
+                <form action="{% url 'main:decrement' item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Decrement">Decrease</button>
+                </form>
+                <form action="{% url 'main:remove' item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Remove">Remove</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <h5 class="login-session">Sesi terakhir login: {{ last_login }}</h5>
+    <div class="button-container">
+        <a href="{% url 'main:create_product' %}" class="add-product-button">
             Add New Product
-        </button>
-    </a>
-    <a href="{% url 'main:logout' %}">
-        <button>
+        </a>
+        <a href="{% url 'main:logout' %}" class="logout-button">
             Logout
-        </button>
-    </a>
+        </a>
 </body>
 </html>
-
 {% endblock content %}

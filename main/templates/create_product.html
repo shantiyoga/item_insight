@@ -1,19 +1,131 @@
-{% extends 'base.html' %} 
+{% extends 'base.html' %}
 
 {% block content %}
-<h1>Add New Product</h1>
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
 
-<form method="POST">
-    {% csrf_token %}
-    <table>
-        {{ form.as_table }}
-        <tr>
-            <td></td>
-            <td>
-                <input type="submit" value="Add Product"/>
-            </td>
-        </tr>
-    </table>
-</form>
+    .create_product {
+        width: 360px;
+        background-color: rgba(255, 255, 255, 0.3);
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    }
 
+    h1 {
+        color: #cb0073;
+        text-align: center;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    td.label {
+        color: #a90c65;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #F91C9B;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        color: #88094f;
+    }
+
+    input[type="submit"] {
+        background-color: #F91C9B;
+        color: #fff;
+        cursor: pointer;
+        width: auto; 
+        padding: 10px 20px; 
+    }
+
+    input[type="submit"]:hover {
+        background-color: #c7107e;
+    }
+
+    .error-message {
+        color: rgb(149, 6, 80);
+        font-size: 12px;
+        display: none;
+        margin-top: 5px; 
+    }
+ 
+    .button-container {
+        align-items: center;
+        margin: 0 auto; 
+        display: block; 
+        margin-top: 10px;
+    }
+</style>
+
+<script>
+    function validateNumericInput(inputField, errorMessageId) {
+        const inputValue = inputField.value;
+        if (!/^\d+(\.\d+)?$/.test(inputValue)) {
+            document.getElementById(errorMessageId).style.display = 'block';
+            inputField.value = '';
+            inputField.focus();
+        } else {
+            document.getElementById(errorMessageId).style.display = 'none';
+        }
+    }
+</script>
+
+<div class="create_product">
+
+    <h1>Add New Item</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td class="label">Name Item: </td>
+                <td><input type="text" name="name" class="form-control"></td>
+            </tr>
+            <tr>
+                <td class="label">Amount: </td>
+                <td>
+                    <input type="text" name="amount" class="amount" onblur="validateNumericInput(this, 'amountError')">
+                    <p id="amountError" class="error-message">Amount must be a numeric value.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Price: </td>
+                <td>
+                    <input type="text" name="price" class="price" onblur="validateNumericInput(this, 'priceError')">
+                    <p id="priceError" class="error-message">Price must be a numeric value.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Category: </td>
+                <td><input type="text" name="category" class="form-control"></td>
+            </tr>
+            <tr>
+                <td class="label">Description: </td>
+                <td><input type="text" name="description" class="form-control"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="button-container">
+                    <input class="btn createproduct_button" type="submit" value="Add Item">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div>
 {% endblock %}

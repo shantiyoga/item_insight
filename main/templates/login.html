@@ -5,8 +5,85 @@
 {% endblock meta %}
 
 {% block content %}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+        background-size: cover; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
 
-<div class = "login">
+    .login {
+        background-color: rgba(255, 255, 255, 0.3); 
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+        color: #F91C9B;
+        text-align: center;
+    }
+
+    table {
+        margin: 0 auto;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    td.label {
+        color: #a90c65;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 90%;
+        padding: 10px;
+        border: 1px solid #F91C9B; 
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif; 
+        color: #88094f;
+    }
+
+    .login_btn {
+        background-color: #F91C9B; 
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif; 
+    }
+
+    .login_btn:hover {
+        background-color: #c7107e; 
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        color: #78194f; 
+        font-size: 12px;
+    }
+
+    a {
+        color: #F91C9B; 
+        font-family: 'Poppins', sans-serif;
+
+    }
+</style>
+
+<div class="login">
 
     <h1>Login</h1>
 
@@ -14,12 +91,12 @@
         {% csrf_token %}
         <table>
             <tr>
-                <td>Username: </td>
+                <td class="label">Username: </td>
                 <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
             </tr>
-                    
+
             <tr>
-                <td>Password: </td>
+                <td class="label">Password: </td>
                 <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
             </tr>
 
@@ -36,10 +113,9 @@
                 <li>{{ message }}</li>
             {% endfor %}
         </ul>
-    {% endif %}     
+    {% endif %}
         
-    Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a>
-
+    <p style="font-size: 14px;">Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a></p>
 </div>
 
 {% endblock content %}

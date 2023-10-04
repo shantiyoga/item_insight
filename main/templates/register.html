@@ -5,30 +5,111 @@
 {% endblock meta %}
 
 {% block content %}  
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+        background-size: cover; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
 
-<div class = "login">
+    .register {
+        background-color: rgba(255, 255, 255, 0.3); 
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        margin: 0;
+    }
+
+    h1 {
+        color: #F91C9B; 
+        margin-bottom: 20px; 
+    }
+
+    table {
+        margin: 0 auto;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    label {
+        color: #88094f;
+        text-align: left; 
+        display: block; 
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 90%; 
+        padding: 12px;
+        border: 1px solid #F91C9B;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        color:  #88094f
+    }
+
+
+    input[type="submit"] {
+        width: 12%; 
+        padding: 12px; 
+        background-color: #F91C9B;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif; 
+        margin: 0 auto; 
+        display: block;
+        margin-top: 10px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #c7107e;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        color: #000000; 
+        font-size: 12px; 
+        margin-top: 5px; 
+    }
+
+    .pink-text {
+        color:  #88094f; 
+    }
+</style>
+
+<div class="register">
     
     <h1>Register</h1>  
 
-        <form method="POST" >  
-            {% csrf_token %}  
-            <table>  
-                {{ form.as_table }}  
-                <tr>  
-                    <td></td>
-                    <td><input type="submit" name="submit" value="Daftar"/></td>  
-                </tr>  
-            </table>  
-        </form>
+    <form method="POST">  
+        {% csrf_token %}  
+        <table>  
+            {{ form.as_table }}  
+        </table>
+        <input type="submit" name="submit" value="Daftar"/> 
+    </form>
 
     {% if messages %}  
         <ul>   
             {% for message in messages %}  
-                <li>{{ message }}</li>  
-                {% endfor %}  
+                <li><span class="pink-text">{{ message }}</span></li>  
+            {% endfor %}  
         </ul>   
     {% endif %}
 
 </div>  
-
-{% endblock content %}
+{% endblock content %}  

@@ -1,12 +1,12 @@
 # **Item Insight**
 
 **Pemrograman Berbasis Platform**<br/>
-**Tugas 2: Implementasi Model-View-Template (MVT) pada Django**<br/>
-
-**Author**<br/>
 Shanti Yoga Rahayu<br/>
 2206082360<br/>
 PBP D<br/>
+
+
+**Tugas 2: Implementasi Model-View-Template (MVT) pada Django**<br/>
 
 Tautan menuju aplikasi Adaptable yang sudah melalui tahap deployment dapat diakses melalui [link ini](https://item-insight.adaptable.app/main/).
 
@@ -389,7 +389,7 @@ Destroying test database for alias 'default'...```
 Berikut penjelasan singkat tentang terkait kode tersebut:
 
 1. `test_main_url_is_exist`:
-   - Fungsi ini bertujuan untuk memeriksa apakah URL `/main/` dalam aplikasi Anda dapat diakses dengan benar (status code 200). 
+   - Fungsi ini bertujuan untuk memeriksa apakah URL `/main/` dalam aplikasi dapat diakses dengan benar (status code 200). 
    - Langkah-langkah yang digunakan adalah dengan membuat objek `Client()` yang digunakan untuk membuat permintaan HTTP simulasi, menggunakan objek `Client()` untuk melakukan permintaan GET ke URL `/main/`, dan memeriksa apakah respons dari permintaan tersebut memiliki status kode 200 (OK).
 
 2. `test_main_using_main_template`:
@@ -1300,3 +1300,925 @@ Cookies dari pihak ketiga yang disematkan dalam situs web dapat digunakan untuk 
 
 #### 4. Cross-Site Request Forgery (CSRF)
 Dalam serangan CSRF, penyerang mencoba membuat pengguna yang telah terotentikasi melakukan tindakan tertentu di situs web tanpa sepengetahuan mereka. Hal ini dapat mengakibatkan tindakan yang tidak diinginkan, seperti mengganti kata sandi atau melakukan tindakan keuangan.
+
+# **Tugas 5: Desain Web menggunakan HTML, CSS dan Framework CSS**<br/>
+
+## **Kustomisasi desain pada template HTML yang telah dibuat pada Tugas 4**
+### 1. Kustomisasi halaman login. 
+Berikut ini adalah penjelasan kustomisasi halaman login.
+
+1. **Tambahkan `<style>` CSS**<br/>
+Tambahkan elemen `<style>` di dalam blok konten untuk mengatur tampilan halaman login agar memungkinkan style CSS langsung dalam template HTML.
+```
+...
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Login</title>
+{% endblock meta %}
+
+{% block content %}
+<style>
+    ...
+<style>
+```
+
+2. **Ubah Latar Belakang**<br/>
+Atur latar belakang halaman login dengan properti `background-image` dengan menggunakan gambar yang diambil dari suatu URL. Gunakan `background-size: cover;` agar mengisi seluruh halaman.
+
+```
+    ...
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+        background-size: cover; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+    ...
+```
+
+3. **Ganti Warna Latar Login Box**<br/>
+Atur latar belakang dari elemen dengan kelas "login" menggunakan properti `background-color` dan berikan efek transparansi.
+```
+    ...
+    .login {
+        background-color: rgba(255, 255, 255, 0.3); 
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    }
+    ...
+```
+
+4. **Atur Style Tampilan Login**<br/>
+Atur properti CSS untuk elemen-elemen di dalam halaman login, seperti `color`, `text-align`, `padding`, `border`, `border-radius`, `font-family`, dan lain-lain. Hal ini dilakukan untuk membuat tampilan elemen lebih menarik.
+```
+...
+
+    h1 {
+        color: #F91C9B;
+        text-align: center;
+    }
+
+    table {
+        margin: 0 auto;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    td.label {
+        color: #a90c65;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 90%;
+        padding: 10px;
+        border: 1px solid #F91C9B; 
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif; 
+        color: #88094f;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        color: #78194f; 
+        font-size: 12px;
+    }
+
+    a {
+        color: #F91C9B; 
+        font-family: 'Poppins', sans-serif;
+    }
+</style>
+
+...
+```
+
+5. **Atur Style Tombol Login** <br/>
+Ganti tampilan tombol login dalam `<style>` dengan mengatur beberapa properti seperti warna latar belakang, warna teks, padding, border, border-radius, cursor, dan font-family. Efek hover juga ditambahkan untuk mengganti warna latar belakang tombol saat mouse mengarah ke tombol tersebut.
+```
+...
+    .login_btn {
+        background-color: #F91C9B; 
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif; 
+    }
+
+    .login_btn:hover {
+        background-color: #c7107e; 
+    }
+...
+```
+
+6. **Sesuaikan HTML dengan CSS**<br/>
+Sesuaikan kode HTML dan pastikan bahwa atribut dan class pada elemen-elemen HTML cocok dengan CSS yang ditambahkan.
+```
+...
+<div class="login">
+
+    <h1>Login</h1>
+
+    <form method="POST" action="">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td class="label">Username: </td>
+                <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td class="label">Password: </td>
+                <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
+            </tr>
+
+            <tr>
+                <td></td>
+                <td><input class="btn login_btn" type="submit" value="Login"></td>
+            </tr>
+        </table>
+    </form>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li>{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+        
+    <p style="font-size: 14px;">Don't have an account yet? <a href="{% url 'main:register' %}">Register Now</a></p>
+</div>
+
+{% endblock content %}
+```
+
+7. **Validasi dan Uji**<br/>
+Setelah berhasil mengubah kode, pastikan untuk menguji halaman web untuk memastikan tampilan telah sesuai.
+
+### 2. Kustomisasi halaman register
+Berikut ini adalah penjelasan kustomisasi halaman register.
+
+1. **Tambahkan CSS**<br/>
+Tambahkan `<style>` CSS ke dalam template untuk mengatur tampilan berbagai elemen, termasuk latar belakang, tampilan form, warna teks, dan lainnya.
+```
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Register</title>
+{% endblock meta %}
+
+{% block content %}  
+<style>
+...
+</style>
+```
+
+2. **Ubah Latar Belakang**<br/>
+Atur latar belakang halaman register dengan properti `background-image` dengan menggunakan gambar yang diambil dari suatu URL. Gunakan `background-size: cover;` agar mengisi seluruh halaman.
+```
+...
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+        background-size: cover; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+...
+```
+3. **Ganti Warna Latar Login Box**<br/>
+Di dalam `<style>` `</style>` atur latar belakang dari elemen dengan kelas "login" menggunakan properti `background-color` dan berikan efek transparansi.
+```
+    ...
+    .register {
+        background-color: rgba(255, 255, 255, 0.3); 
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        margin: 0;
+    }
+    ...
+```
+
+4. **Ubah Style sesuai Keinginan**<br/>
+Gantilah tampilan yang ingin diterapkan pada halaman register. Atur properti CSS untuk elemen-elemen di dalam register, seperti `color`, `text-align`, `padding`, `border`, `border-radius`, `font-family`, dan lain-lain untuk membuat tampilan lebih menarik.
+```
+{% extends 'base.html' %}
+
+{% block meta %}
+    <title>Register</title>
+{% endblock meta %}
+
+{% block content %}  
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+        background-size: cover; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .register {
+        background-color: rgba(255, 255, 255, 0.3); 
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+        text-align: center;
+        margin: 0;
+    }
+
+    h1 {
+        color: #F91C9B; 
+        margin-bottom: 20px; 
+    }
+
+    table {
+        margin: 0 auto;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    label {
+        color: #88094f;
+        text-align: left; 
+        display: block; 
+        margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 90%; 
+        padding: 12px;
+        border: 1px solid #F91C9B;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        color:  #88094f
+    }
+
+
+    input[type="submit"] {
+        width: 12%; 
+        padding: 12px; 
+        background-color: #F91C9B;
+        color: #fff;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif; 
+        margin: 0 auto; 
+        display: block;
+        margin-top: 10px;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #c7107e;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        color: #000000; 
+        font-size: 12px; 
+        margin-top: 5px; 
+    }
+
+    .pink-text {
+        color:  #88094f; 
+    }
+</style>
+```
+
+5. **Sesuaikan HTML dengan CSS** <br/>
+Sesuaikan kode HTML dan pastikan bahwa atribut dan class pada elemen-elemen HTML cocok dengan CSS yang ditambahkan.
+```
+...
+<div class="register">
+    
+    <h1>Register</h1>  
+
+    <form method="POST">  
+        {% csrf_token %}  
+        <table>  
+            {{ form.as_table }}  
+        </table>
+        <input type="submit" name="submit" value="Daftar"/> 
+    </form>
+
+    {% if messages %}  
+        <ul>   
+            {% for message in messages %}  
+                <li><span class="pink-text">{{ message }}</span></li>  
+            {% endfor %}  
+        </ul>   
+    {% endif %}
+
+</div>  
+{% endblock content %}  
+```
+
+6. **Validasi dan Uji**<br/>
+Setelah berhasil mengubah kode, pastikan untuk menguji halaman web untuk memastikan tampilan telah sesuai.
+
+### 3. Kustomisasi Tambah Inventori
+
+1. **Tambahkan CSS**<br/>
+Tambahkan CSS ke dalam template untuk mengatur tampilan berbagai elemen, termasuk latar belakang, tampilan form, warna teks, dan lainnya.
+```
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+...
+</style>
+
+...
+```
+
+2. **Ubah Latar Belakang**<br/>
+Atur latar belakang halaman login dengan properti `background-image` dengan menggunakan gambar yang diambil dari suatu URL. Gunakan `background-size: cover;` agar mengisi seluruh halaman.
+```
+...
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+...
+```
+
+3. **Ubah Style sesuai Keinginan**<br/>
+Tambahkan sejumlah CSS styling yang akan memengaruhi tampilan halaman, seperti mengubah font, mengatur latar belakang, merubah warna teks, membuat input field, merupah style tombol, dan lain-lain agar tampilan halaman menjadi lebih menarik dan terstruktur.
+```
+...
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .create_product {
+        width: 360px;
+        background-color: rgba(255, 255, 255, 0.3);
+        padding: 20px;
+        border-radius: 20px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+        color: #cb0073;
+        text-align: center;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    td.label {
+        color: #a90c65;
+        font-weight: bold;
+    }
+
+    input[type="text"],
+    input[type="submit"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #F91C9B;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        color: #88094f;
+    }
+
+    input[type="submit"] {
+        background-color: #F91C9B;
+        color: #fff;
+        cursor: pointer;
+        width: auto; 
+        padding: 10px 20px; 
+    }
+
+    input[type="submit"]:hover {
+        background-color: #c7107e;
+    }
+ 
+    .button-container {
+        align-items: center;
+        margin: 0 auto; 
+        display: block; 
+        margin-top: 10px;
+    }
+</style>
+...
+```
+
+4. **Tambahkan Validasi Input Numerik dengan JavaScript**<br/>
+Tambahkan skrip JavaScript untuk memvalidasi input numerik pada "Amount" dan "Price" untuk memastikan bahwa nilai yang dimasukkan adalah numerik.
+```
+...
+
+    .error-message {
+        color: rgb(149, 6, 80);
+        font-size: 12px;
+        display: none;
+        margin-top: 5px; 
+    }
+...
+```
+
+6. **Sesuaikan HTML dengan CSS** <br/>
+Sesuaikan kode HTML dan pastikan bahwa atribut dan class pada elemen-elemen HTML cocok dengan CSS yang ditambahkan.
+```
+...
+
+</script>
+
+<div class="create_product">
+
+    <h1>Add New Item</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td class="label">Name Item: </td>
+                <td><input type="text" name="name" class="form-control"></td>
+            </tr>
+            <tr>
+                <td class="label">Amount: </td>
+                <td>
+                    <input type="text" name="amount" class="amount" onblur="validateNumericInput(this, 'amountError')">
+                    <p id="amountError" class="error-message">Amount must be a numeric value.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Price: </td>
+                <td>
+                    <input type="text" name="price" class="price" onblur="validateNumericInput(this, 'priceError')">
+                    <p id="priceError" class="error-message">Price must be a numeric value.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Category: </td>
+                <td><input type="text" name="category" class="form-control"></td>
+            </tr>
+            <tr>
+                <td class="label">Description: </td>
+                <td><input type="text" name="description" class="form-control"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="button-container">
+                    <input class="btn createproduct_button" type="submit" value="Add Item">
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+{% endblock %}
+```
+
+7. **Validasi dan Uji**<br/>
+Setelah berhasil mengubah kode, pastikan untuk menguji halaman web untuk memastikan tampilan telah sesuai.
+
+### 4. Kustomisasi Halaman Daftar Inventori Menjadi Lebih Berwarna
+1. **Tambahkan CSS**<br/>
+Tambahkan `<style>` CSS ke dalam template untuk mengatur tampilan berbagai elemen, termasuk latar belakang, tampilan form, warna teks, dan lainnya.
+```
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <head>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Inventory Cards</title>
+     
+    <style>
+
+...
+    </style>
+```
+
+2. **Ubah Latar Belakang**<br/>
+Atur latar belakang halaman login dengan properti `background-image` dengan menggunakan gambar yang diambil dari suatu URL. Gunakan `background-size: cover;` agar mengisi seluruh halaman.
+```
+...
+        body {
+            background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+        }
+...
+```
+
+3. **Ubah Style Teks Judul, Nama, NPM, Kelas**<br/>
+Ganti warna teks, posisi, dan ukuran teks warna sesuai preferensi.
+```
+...
+        .data-app {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            line-height: 1.2; 
+            color: #8a093c; 
+            margin-left: 100px;
+        }
+...
+```
+
+4. **Ganti Tampilan Data**<br/>
+Ubah tampilan data dari tabel mejadi card. Ganti markup HTML dan CSS untuk membuat kartu yang sesuai dengan data. Sesuaikan ukuran elemen-elemen, margin, dan padding sesuai kebutuhan dan keinginan dengan mengedit properti CSS yang relevan.
+```
+...
+    <st>
+        body {
+            background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif; 
+        }
+
+        .title-container {
+            text-align: center; 
+            margin: auto; 
+            margin-bottom : 30px;
+        }
+
+        .item-insight-title {
+            font-family: 'Poppins', sans-serif; 
+            font-size: 50px; 
+            font-weight: bold;
+            color: #bd014f; 
+            margin: 0; 
+}
+        
+        .data-app {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            line-height: 1.2; 
+            color: #8a093c;
+            margin-left: 100px;
+        }
+    
+        h3, p, h2 {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .item-count-container {
+        width: 500px;
+        text-align: center;
+        background-color: rgba(255, 255, 255, 0.5);
+        padding: 5px 5px;
+        margin: auto;
+        justify-content: center;
+        border-radius: 10px; 
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+        .item-count {
+            font-weight: bold;
+            font-size: 16px; 
+            color: #ff0066; 
+        }
+    
+        .item-cards {
+            margin-top: 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+    
+        .item-card {
+            width: 300px;
+            padding: 20px;
+            padding-bottom: 25px;
+            border: 2px solid #f675a9;
+            border-radius: 10px;
+            background-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 8px rgba(46, 6, 26, 0.2);
+            transition: transform 0.2s;
+        }
+
+        .item-category {
+            color: #831341; 
+        }
+
+        .item-category-value {
+             color: #831341; 
+        }
+
+        .item-card:hover {
+            transform: scale(1.05);
+        }
+    
+        .item-details {
+            text-align: left;
+            margin-top: 10px;
+        }
+    
+        .item-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+    
+        .item-actions button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #dd3e7e;
+            color:aliceblue
+        }
+    
+        .item-actions button:hover {
+            background-color: #f675a9;
+            color: white;
+        }
+
+        .login-session {
+            font-weight: bold;
+            margin-left: 100px; 
+            color: #740936;
+}
+    </style>
+...
+```
+
+5. **Atur Syle Tombol Add Item dan Logout** <br/>
+Ganti tampilan tombol dengan mengatur beberapa properti seperti warna latar belakang, warna teks, padding, border, border-radius, cursor, dan font-family. Efek hover juga ditambahkan untuk mengganti warna latar belakang tombol saat mouse mengarah ke tombol tersebut.
+```
+...
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 50px; 
+        }
+
+        .add-product-button {
+            text-decoration: none;
+            background-color: #fedeea;
+            font-size: 14px;
+            color: rgb(149, 12, 67);
+            font-weight: bold;
+            border-color: #dd3e7e;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-right: 10px; 
+            transition: background-color 0.2s;
+        }
+
+        .add-product-button:hover {
+            background-color: #fcc9db;
+        }
+
+        .logout-button {
+            text-decoration: none;
+            background-color: #ab124f;
+            color: white;
+            font-size: 14px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin-left: 10px; 
+            transition: background-color 0.2s;
+        }
+
+        .logout-button:hover {
+            background-color: #660729;
+        }
+...
+```
+
+6. **Sesuaikan HTML dengan CSS** <br/>
+Sesuaikan kode HTML dan pastikan bahwa atribut dan class pada elemen-elemen HTML cocok dengan CSS yang ditambahkan dibawah `</head>`.
+```
+...
+<body>
+    <div class="data-app">
+        <h3>{{ creator }}</h3>
+        <h3>{{ id }}</h3>
+        <h3>{{ class }}</h3>
+    </div>
+    <div class="title-container">
+        <h1 class="item-insight-title">Item Insight</h1>
+    </div>
+    <div class="item-count-container">
+        <p class="item-count">Exquisite collection of {{ items_list|length }} floral item(s) stored in this app.</p>
+    </div>
+    
+    <div class="item-cards">
+        {% for item in items_list %}
+        <div class="item-card">
+            <h2>{{ item.name }}</h2>
+            <div class="item-details">
+                <p><strong>Amount:</strong> {{ item.amount }}</p>
+                <p><strong>Description:</strong> {{ item.description }}</p>
+                <p><strong>Price:</strong> {{ item.price }}</p>
+                <p><strong class="item-category">Category:</strong> <span class="item-category-value">{{ item.category }}</span></p>
+            </div>
+            <div class="item-actions">
+                <form action="{% url 'main:increment' item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Increment">Add</button>
+                </form>
+                <form action="{% url 'main:decrement' item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Decrement">Decrease</button>
+                </form>
+                <form action="{% url 'main:remove' item.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" name="Remove">Remove</button>
+                </form>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <h5 class="login-session">Sesi terakhir login: {{ last_login }}</h5>
+    <div class="button-container">
+        <a href="{% url 'main:create_product' %}" class="add-product-button">
+            Add New Product
+        </a>
+        <a href="{% url 'main:logout' %}" class="logout-button">
+            Logout
+        </a>
+</body>
+</html>
+{% endblock content %}
+...
+```
+
+7. **Validasi dan Uji**<br/>
+Setelah berhasil mengubah kode, pastikan untuk menguji halaman web untuk memastikan tampilan telah sesuai.
+
+## Bonus
+Memberikan warna yang berbeda (teks atau background) pada baris terakhir dari item pada inventori anda menggunakan CSS. 
+
+Baris terakhir pada item adalah `Category`. Buat warna yang berbeda dengan kode berikut.
+```
+...
+        .item-category {
+            color: #831341; 
+        }
+
+        .item-category-value {
+             color: #831341; 
+        }
+...
+```
+Perbedaan warna pada category (baris paling bawah) dibanding baris lainnya dapat dilihat dalam gambar berikut.
+![alt-text](assets/Bonus41.png)
+![alt-text](assets/Bonus42.png)
+
+
+## **Penjelasan Manfaat dari Setiap Element Selector dan Waktu yang Tepat untuk Menggunakannya**
+
+Setiap elemen selektor dalam CSS memiliki manfaat dan waktu yang tepat untuk menggunakannya tergantung pada kebutuhan desain dan konteks pengembangan web. Berikut adalah beberapa elemen selektor umum beserta penjelasan manfaat dan waktu yang tepat untuk menggunakannya:
+
+1. **Element Selector (`element`)**<br>
+   Selector ini memungkinkan untuk menggambarkan semua elemen HTML dari jenis tertentu. Misalnya, `p` akan memilih semua elemen `<p>`, dan `h1` akan memilih semua elemen `<h1>`. Elemen selector tepat digunakan ketika ingin menerapkan gaya yang seragam ke semua elemen yang memiliki tipe yang sama dalam dokumen HTML.
+
+2. **Class Selector (`.class-name`)**<br>
+   Selector ini memungkinkan untuk memilih elemen HTML yang memiliki atribut `class` tertentu yang berguna untuk menggambarkan gaya ke elemen-elemen yang memiliki kelas yang sama. Class selector tepat digunakan ketika ingin memberikan gaya yang sama kepada beberapa elemen yang memiliki kelas yang sama, tetapi berbeda dari elemen-elemen dengan kelas lain.
+
+3. **ID Selector (`#id-name`)**<br>
+    Selector ini memungkinkan untuk memilih elemen HTML yang memiliki atribut `id` tertentu. ID harus unik dalam satu halaman web. ID selector tepat digunakan ketika ingin menerapkan gaya atau perilaku unik pada elemen tertentu yang memiliki ID unik.
+
+4. **Universal Selector (`*`)**<br>
+   Uniersal selector memilih semua elemen dalam dokumen HTML. Universal selector harus digunakan dengan hati-hati karena bisa mempengaruhi semua elemen dalam dokumen. Biasanya, selector ini digunakan untuk mereset gaya default browser atau untuk penggunaan yang sangat spesifik.
+
+5. **Pseudo-class Selector (`:pseudo-class`)**<br>
+   Selector ini memungkinkan untuk memilih elemen berdasarkan keadaan atau interaksi pengguna, seperti `:hover` untuk mengubah tampilan saat pengguna mengarahkan kursor pada elemen. Pseudo-class selector tepat digunakan ketika ingin mengubah tampilan elemen berdasarkan perilaku pengguna atau keadaan elemen tersebut.
+
+6. **Pseudo-element Selector (`::pseudo-element`)**<br>
+   Selector ini memungkinkan untuk menargetkan dan mengubah bagian spesifik dari elemen, seperti `::before` untuk menambahkan konten sebelum elemen.
+   Pseudo-element selector tepat digunakan ketika ingin memodifikasi bagian tertentu dari elemen tanpa menambahkan elemen tambahan dalam HTML.
+
+
+## **Penjelasan HTML5 Tag yang Saya Ketahui**
+
+1. **`<header>`**<br>
+ Elemen `<header>` digunakan untuk mendefinisikan bagian atas atau kepala dari sebuah dokumen HTML. Biasanya berisi judul, logo, dan informasi lain yang terkait dengan dokumen.
+
+2. **`<nav>`**<br>
+Elemen `<nav>` digunakan untuk mengelompokkan tautan navigasi dalam sebuah dokumen. Elemen ini dapat membantu dalam membuat menu atau daftar tautan ke halaman lain di situs web.
+
+3. **`<main>`** <br>
+ Elemen `<main>` digunakan untuk mengelompokkan konten utama dari sebuah halaman web. Hanya ada satu elemen `<main>` dalam satu halaman.
+
+4. **`<section>`**<br>
+Elemen `<section>` digunakan untuk mengelompokkan konten yang memiliki topik atau tematik yang sama dalam dokumen sehimgga membantu dalam struktur dan pemahaman isi halaman.
+
+5. **`<article>`**<br>
+Elemen `<article>` digunakan untuk mengelompokkan konten independen yang dapat berdiri sendiri, seperti berita atau posting blog. Biasanya elemen ini berisi konten yang dapat diambil dan dipublikasikan secara terpisah.
+
+6. **`<time>`**<br> 
+Elemen `<time>` digunakan untuk menandai tanggal dan waktu dalam dokumen. 
+
+7. **`<footer>`**<br>
+Elemen `<footer>` digunakan untuk mendefinisikan bagian bawah dari sebuah dokumen atau bagian dari konten. Umumnya, elemen ini berisi informasi seperti tautan ke halaman terkait, hak cipta, atau informasi kontak.
+
+8. **`<figure>`**<br>
+Elemen `<figure>` digunakan untuk mengelompokkan elemen multimedia atau gambar dengan keterangan menggunakan elemen `<figcaption>`.
+
+9. **`<figcaption>`**<br>
+Elemen `<figcaption>` digunakan untuk memberikan keterangan atau deskripsi terkait elemen dalam elemen `<figure>` yang membantu pengguna dalam memahami konten.
+
+10. **`<video>`**<br>
+Elemen `<video>` digunakan untuk menyisipkan video ke dalam halaman web. 
+
+11. **`<audio>`**<br>
+Elemen `<audio>` digunakan untuk menyisipkan file audio ke dalam halaman web. 
+
+12. **`<mark>`**<br> Elemen `<mark>` digunakan untuk menyorot atau menandai teks dalam dokumen yang berguna untuk menarik perhatian pengguna ke bagian tertentu dari teks.
+
+13. **`<progress>`**<br>
+Elemen `<progress>` digunakan untuk menampilkan bar kemajuan yang mengukur kemajuan atau status dari tugas atau proses yang sedang berlangsung.
+
+14. **`<details>`**<br>
+ Elemen `<details>` digunakan untuk membuat area yang bisa diperluas dan dilipat yang berisi konten tambahan yang dapat ditampilkan atau disembunyikan oleh pengguna.
+
+15. **`<abbr>`**<br>
+ Elemen `<abbr>` digunakan untuk mengelompokkan singkatan atau akronim dalam dokumen dan memberikan penjelasan saat pengguna mengarahkan kursor ke atasnya.
+
+## **Penjelasan Perbedaan antara Margin dan Padding**
+Margin adalah ruang kosong di sekitar elemen atau dapat dikatakan sebagai jarak antara elemen dan elemen lainnya. Margin dapat digunakan untuk menambahkan ruang kosong di sekitar elemen HTML atau untuk mengubah posisi elemen relatif terhadap elemen lainnya. Sementara itu, Padding adalah ruang kosong di dalam elemen atau dapat dikatakan sebagai jarak antara tepi elemen dan kontennya. Padding digunakan untuk menambahkan ruang kosong di sekitar konten elemen atau untuk memperbesar atau memperkecil elemen itu sendiri.
+
+Perbedaan antara margin dan padding dapat dilihat pada tabel berikut.
+| Perbedaan                | Margin                                              | Padding                                             |
+|-------------------------|----------------------------------------------------|-----------------------------------------------------|
+| Definisi                | Ruang di luar elemen, antara elemen dan elemen lainnya. | Ruang di dalam elemen, antara konten elemen dan batas elemen. |
+| Pengaruh Terhadap Elemen  | Tidak mempengaruhi tampilan elemen itu sendiri, tetapi mengatur jarak di sekitar elemen. | Mempengaruhi tampilan elemen itu sendiri, dengan menambahkan ruang di dalam elemen. |
+| Pengukuran               | Didefinisikan dengan properti `margin` dan memiliki nilai positif atau negatif. | Didefinisikan dengan properti `padding` dan memiliki nilai positif. |
+| Ruang Kosong            | Menambahkan ruang kosong di luar elemen.           | Menambahkan ruang kosong di dalam elemen.            |
+| Efek Terhadap Tetangga  | Margin dari satu elemen dapat berdampak pada margin elemen tetangga. | Padding dari satu elemen tidak berdampak pada elemen tetangga. |
+| Mengatur Jarak Antar Elemen | Digunakan untuk mengatur jarak antara elemen-elemen, seperti elemen blok. | Digunakan untuk mengatur jarak antara konten elemen dan batas elemen itu sendiri. |
+| Keluaran Visual          | Mempengaruhi jarak antara elemen dan elemen lainnya dalam halaman web. | Mempengaruhi jarak antara konten elemen dan batas elemen dalam elemen itu sendiri. |
+| Pengaruh Pada Ukuran Elemen  | Tidak mempengaruhi ukuran elemen itu sendiri.    | Padding dapat mempengaruhi ukuran elemen, karena menambahkan ruang di dalamnya. |
+| Contoh                  | `<div style="margin: 20px;">Konten</div>`       | `<div style="padding: 20px;">Konten</div>`       |
+
+
+
+## **Penjelasan Perbedaan antara Framework CSS Tailwind dan Bootstrap. Kapan Sebaiknya Kita Menggunakan Bootstrap daripada Tailwind, dan Sebaliknya?**
+
+Penjelasan dapat dilihat dalam tabel berikut.
+| Kriteria                                  | Bootstrap                                            | Tailwind CSS                                      |
+|-------------------------------------------|------------------------------------------------------|---------------------------------------------------|
+| **Filosofi Desain**                       | Didesain dengan komponen yang sudah dibuat sebelumnya, memiliki tampilan bawaan yang konsisten. | Didesain sebagai alat konfigurasi tingkat rendah yang memberikan kebebasan lebih besar dalam desain. |
+| **Kesulitan**                             | Lebih mudah digunakan karena komponen-komponennya telah dibuat sebelumnya, cocok untuk pemula. | Memiliki kurva belajar yang lebih tinggi karena perlu memahami kelas-kelas yang ada. |
+| **Kustomisasi**                           | Lebih sulit dikustomisasi jika ingin melakukan perubahan signifikan dalam desain. | Sangat mudah dikustomisasi dan memberikan fleksibilitas dalam menyesuaikan tampilan. |
+| **Ukuran**                                | Lebih besar dalam ukuran file CSS dan JavaScript karena komponen yang lebih banyak. | Lebih ringan dalam ukuran karena hanya memuat apa yang digunakan. |
+| **Penggunaan di Proyek Besar**             | Cocok untuk proyek besar dengan tampilan yang konsisten dan pengembang yang berbeda-beda. | Cocok untuk proyek besar karena memungkinkan pengembang untuk membangun desain yang sangat khusus. |
+| **Integrasi dengan JavaScript**            | Menyediakan komponen JavaScript bawaan untuk interaksi, seperti modal dan peringatan. | Tidak memiliki komponen JavaScript bawaan; Anda harus menambahkan JavaScript sendiri. |
+| **Pengembangan Cepat**                    | Memungkinkan pengembangan cepat dengan komponen siap pakai. | Memerlukan waktu lebih lama untuk mengatur kelas-kelas dan struktur CSS. |
+| **Komunitas dan Ekosistem**               | Memiliki komunitas yang besar, banyak sumber daya, dan plug-in yang tersedia. | Komunitas sedang tumbuh dan memiliki beberapa sumber daya yang tersedia. |
+| **Kapan Sebaiknya Menggunakan**           | - Ketika memerlukan pengembangan yang lebih cepat dan konsisten. <br> - Saat bekerja dengan proyek kecil hingga menengah. <br> - Jika pengembang adalah seorang pemula dalam CSS dan desain web. | - Saat memerlukan tingkat kustomisasi tinggi dalam desain dan tampilan. <br> - Saat bekerja pada proyek besar dan kompleks. <br> - Jika pengembang telah berpengalaman dan ingin memiliki kendali penuh atas setiap aspek desain dan tampilan. |

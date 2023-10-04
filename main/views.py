@@ -27,7 +27,7 @@ def show_item(request):
         'id' : 2206082360,
         'class' : 'PBP D',
         'items_list': items,
-        'last_login': request.COOKIES['last_login'],
+        'last_login': request.COOKIES.get('last_login'),
     }
 
     return render(request, 'main.html', context)
