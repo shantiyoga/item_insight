@@ -20,9 +20,11 @@
     }
 
     body {
-        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
-        margin-top: 25px;
-        text-align: center;
+    background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+    background-attachment: fixed; /* Menjadikan gambar latar belakang tetap */
+    background-size: cover; /* Mengisi seluruh latar belakang */
+    margin-top: 25px;
+    text-align: center;
     }
 
     .header {
@@ -36,19 +38,19 @@
         font-size: 14px;
         line-height: 1.2; 
         color: #8a093c;
-        margin-left: 100px;
+        margin: 1rem 1rem 1rem 0.5rem;
     }
 
     .item-name {
         font-size: 3rem;
         font-weight: 700;
-        color: rgb(178, 62, 143);
-        margin: 0rem 1rem 1rem 0.5rem;
+        color: rgb(232, 38, 157);
+        margin: 1rem 1rem 1rem 0.5rem;
         text-align: left;
     }
 
     .item-name span {
-        color: black;
+        color: rgb(95, 8, 76);
     }
 
     .header-controls {
@@ -58,10 +60,10 @@
     }
 
     .logout-button {
-        background-color: rgba(255, 255, 255, 0.5);
-        color: black;
+        background-color: rgb(167, 28, 93);
+        color: rgb(255, 255, 255);
         font-weight: bold;
-        border: 2px solid #b92f94;
+        border: 2px solid rgb(255, 255, 255);
         border-radius: 10px;
         padding: 5px 20px;
         cursor: pointer;
@@ -69,18 +71,18 @@
     }
 
     .logout-button:hover {
-        background-color: #982d6d;
+        background-color: rgb(125, 5, 63);
     }
 
     .item-count {
         background-color: rgba(255, 255, 255, 0.5);
-        color: black;
+        color: rgb(156, 0, 94);
         font-weight: bold;
         border: 2px solid #581c4e;
         border-radius: 10px;
-        padding: 5px;
-        margin: 50px auto;
-        max-width: 300px;
+        padding: 20px 20px;
+        margin: 20px auto;
+        max-width: 500px;
         text-align: center;
     }
 
@@ -126,7 +128,7 @@
     }
 
     .col-3:last-child .product-card {
-        background-color: rgb(220, 102, 166);
+        background-color: rgb(255, 168, 216);
     }
 
     .product-card:hover {
@@ -154,38 +156,52 @@
         background-color: rgba(239, 12, 125, 0.733);
         color: rgb(255, 255, 255);
         font-weight: bold;
-        border: 2px solid rgb(220, 56, 138);
-        border-radius: 10px;
-        padding: auto;
+        border: 1px solid rgb(220, 56, 138);
+        border-radius: 5px;
+        padding: 5px;
         cursor: pointer;
         transition: background-color 0.3s;
     }
 
     .btn-decrease {
-        background-color: rgb(190, 36, 108);
+        background-color: rgb(182, 22, 126);
         color: rgb(255, 255, 255);
         font-weight: bold;
-        border: 2px solid rgb(154, 22, 108);
-        border-radius: 10px;
-        padding: auto;
+        border: 2px solid rgb(182, 22, 126);
+        border-radius: 5px;
+        padding: 5px;
         cursor: pointer;
         transition: background-color 0.3s;
     }
 
     .btn-remove {
-        background-color: rgba(114, 23, 63, 0.5);
+        background-color: rgb(137, 18, 94);
         color: rgb(255, 255, 255);
         font-weight: bold;
-        border: 2px solid rgb(92, 10, 62);
-        border-radius: 10px;
-        padding: auto;
+        border: 1px solid rgb(137, 18, 94);
+        border-radius: 5px;
+        padding: 5px;
         cursor: pointer;
         transition: background-color 0.3s;
     }
 
-    .btn-add:hover, .btn-decrease:hover, .btn-remove:hover {
-        background-color: #982d6d; 
+    .btn-add:hover {
+        background-color: #5e1240; 
     }
+
+    .btn-decrease:hover {
+        background-color: #5e1240; 
+    }
+
+    .btn-remove:hover {
+        background-color: #5e1240; 
+    }
+
+    .category {
+        color: #df048b;
+    }
+    
+
   </style>
 {% endblock meta %}
 
@@ -195,7 +211,7 @@
         <div class="col-12">
             <div class="header">
                 <h1 class="item-name">
-                    Item <span>Insight</span>
+                    Item <span> Insight</span>
                 </h1>
                 <div class="header-controls">
                     <div class="last-login">
@@ -240,7 +256,7 @@
 
     <div class="row">
       <div class="col-12 text-center">
-          <button type="button" class="btn btn-primary add-product" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Item by AJAX</button>
+        <button type="button" class="btn btn-primary add-product" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background-color: rgb(173, 3, 114); border-color: rgb(173, 3, 114);">Add Item by AJAX</button>
       </div>
     </div>
 </div>
@@ -306,11 +322,10 @@
             <a href="edit-product/${item.pk}">
               <button class="btn-edit">✏️</button>
             </a>
-
             <p>Amount: ${item.fields.amount}</p>
-            <p>Price: IDR ${item.fields.price}</p>
-            <p>Category: ${item.fields.category}</p>
             <p>Description: ${item.fields.description}</p>
+            <p>Price: IDR ${item.fields.price}</p>
+            <p class="category">Category: ${item.fields.category}</p>
             <div class="card-footer">
                 <button onclick="addAmount(${item.pk})" class="btn-add">Add</button>
                 <button onclick="decreaseAmount(${item.pk})" class="btn-decrease">Decrease</button>
