@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block meta %}
+    <title>Edit Product</title>
+{% endblock meta %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Poppins', sans-serif;
+        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+        background-size: cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+    }
+
+    .edit-product {
+        background-color: rgba(255, 255, 255, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+        color: #F91C9B;
+        text-align: center;
+    }
+
+    table {
+        margin: 0 auto;
+    }
+
+    td {
+        padding: 10px;
+    }
+
+    td.label {
+        color: #a90c65;
+        font-weight: bold;
+    }
+
+    input[type="text"] {
+        width: 80%;
+        padding: 10px;
+        border: 1px solid #F91C9B;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        color: #88094f;
+    }
+
+    input[type="submit"] {
+        background-color: #F91C9B;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    input[type="submit"]:hover {
+        background-color: #c7107e;
+    }
+</style>
+
+<script>
+    function validateNumericInput(inputField, errorMessageId) {
+        const inputValue = inputField.value;
+        if (!/^\d+(\.\d+)?$/.test(inputValue)) {
+            document.getElementById(errorMessageId).style.display = 'block';
+            inputField.value = '';
+            inputField.focus();
+        } else {
+            document.getElementById(errorMessageId).style.display = 'none';
+        }
+    }
+</script>
+
+<div class="edit-product">
+    <h1>Edit Product</h1>
+
+    <form method="POST">
+        {% csrf_token %}
+        <table>
+            <tr>
+                <td class="label">Name Item: </td>
+                <td><input type="text" name="name" class="form-control" value="{{ form.name.value }}">
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Amount: </td>
+                <td>
+                    <input type="text" name="amount" class="amount" onblur="validateNumericInput(this, 'amountError')" value="{{ form.amount.value }}">
+                    <p id="amountError" class="error-message">Amount must be a numeric value.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Price: </td>
+                <td>
+                    <input type="text" name="price" class="price" onblur="validateNumericInput(this, 'priceError')" value="{{ form.price.value }}">
+                    <p id="priceError" class="error-message">Price must be a numeric value.</p>
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Category: </td>
+                <td><input type="text" name="category" class="form-control" value="{{ form.category.value }}">
+                </td>
+            </tr>
+            <tr>
+                <td class="label">Description: </td>
+                <td><input type="text" name="description" class="form-control" value="{{ form.description.value }}">
+                </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td class="button-container">
+                    <input class="btn createproduct_button" type="submit" value="Edit Product">
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+{% endblock %}

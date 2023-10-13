@@ -8,7 +8,7 @@ from django.shortcuts import render
 
 #Tugas 4
 import datetime
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.contrib.auth.forms import UserCreationForm
@@ -16,6 +16,8 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
+
+from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
 @login_required(login_url='/login')
@@ -92,28 +94,68 @@ def logout_user(request):
     response.delete_cookie('last_login')
     return response
 
-def increment(request, item_id):
-    if request.method == 'POST' and 'Increment' in request.POST:
-        item = ItemStore.objects.get(id=item_id)
-
+@csrf_exempt
+def add_amount(request, item_id):
+    if request.method == 'POST':
+        item = ItemStore.objects.get(pk=item_id)
+        item.user = request.user
         if item.amount > 0:
             item.amount += 1
             item.save()
-    return HttpResponseRedirect(reverse('main:show_item'))
+        return HttpResponse(b"ADDED", status=201)
+    
+    return HttpResponseNotFound()
 
-def decrement(request, item_id):
-    if request.method == 'POST' and 'Decrement' in request.POST:
-        item = ItemStore.objects.get(id=item_id)
-        
-        if item.amount < 1:
-            item.delete()
-        else:
+@csrf_exempt
+def decrease_amount(request, item_id):
+    if request.method == 'POST':
+        item = ItemStore.objects.get(pk=item_id)
+        item.user = request.user
+        if item.amount > 1:
             item.amount -= 1
             item.save()
-    return HttpResponseRedirect(reverse('main:show_item'))
+        else:
+            item.delete()
+        return HttpResponse(b"REDUCED", status=201)
+    
+    return HttpResponseNotFound()
 
-def remove(request, item_id):
-    if request.method == 'POST' and 'Remove' in request.POST:
-        item = ItemStore.objects.get(id=item_id)
+@csrf_exempt
+def remove_items(request, item_id):
+    if request.method == "DELETE":
+        item = ItemStore.objects.get(pk=item_id, user=request.user)
         item.delete()
-    return HttpResponseRedirect(reverse('main:show_item'))
+        return HttpResponse(b"DELETED", status=201)
+    
+    return HttpResponseNotFound()
+
+def edit_product(request, id):
+    product = ItemStore.objects.get(pk = id)
+    form = ProductForm(request.POST or None, instance=product)
+    if form.is_valid() and request.method == "POST":
+        form.save()
+        return HttpResponseRedirect(reverse('main:show_item'))
+
+    context = {'form': form}
+    return render(request, "edit_product.html", context)
+
+def get_product_json(request):
+    product_item = ItemStore.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', product_item))
+
+@csrf_exempt
+def add_product_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        amount = request.POST.get("amount")
+        description = request.POST.get("description")
+        price = request.POST.get("price")
+        category = request.POST.get("category")
+        user = request.user
+
+        new_product = ItemStore(name=name, amount=amount, description=description, price=price, category=category, user=user)
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()

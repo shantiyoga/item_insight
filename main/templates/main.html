@@ -1,219 +1,364 @@
 {% extends 'base.html' %}
 
-{% block content %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <head>
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins&display=swap">
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Inventory Cards</title>
-     
-    <style>
-        body {
-            background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            font-family: 'Poppins', sans-serif; 
-        }
+{% load static %}
 
-        .title-container {
-            text-align: center; 
-            margin: auto; 
-            margin-bottom : 30px;
-        }
+{% block meta %}
+  <title>Item Insight Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <script src="{% static 'js/main.js' %}"></script>
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href='https://cdn.jsdelivr.net/npm/boxicons@2.0.5/css/boxicons.min.css' rel='stylesheet'>
 
-        .item-insight-title {
-            font-family: 'Poppins', sans-serif; 
-            font-size: 50px; 
-            font-weight: bold;
-            color: #bd014f; 
-            margin: 0; 
-}
-        
-        .data-app {
-            font-family: 'Poppins', sans-serif;
-            font-size: 14px;
-            line-height: 1.2; 
-            color: #8a093c;
-            margin-left: 100px;
-        }
-    
-        h3, p, h2 {
-            font-family: 'Poppins', sans-serif;
-        }
-
-        .item-count-container {
-        width: 500px;
-        text-align: center;
-        background-color: rgba(255, 255, 255, 0.5);
-        padding: 5px 5px;
-        margin: auto;
-        justify-content: center;
-        border-radius: 10px; 
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  <style>
+    * {
+        font-family: 'Poppins', sans-serif;
+        cursor: pointer;
     }
 
-        .item-count {
-            font-weight: bold;
-            font-size: 16px; 
-            color: #ff0066; 
-        }
+    body {
+        background-image: url(https://getwallpapers.com/wallpaper/full/e/a/9/1227331-pink-laptop-wallpapers-1920x1080-for-desktop.jpg);
+        margin-top: 25px;
+        text-align: center;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+    }
+
+    .data-app {
+        font-family: 'Poppins', sans-serif;
+        font-size: 14px;
+        line-height: 1.2; 
+        color: #8a093c;
+        margin-left: 100px;
+    }
+
+    .item-name {
+        font-size: 3rem;
+        font-weight: 700;
+        color: rgb(178, 62, 143);
+        margin: 0rem 1rem 1rem 0.5rem;
+        text-align: left;
+    }
+
+    .item-name span {
+        color: black;
+    }
+
+    .header-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .logout-button {
+        background-color: rgba(255, 255, 255, 0.5);
+        color: black;
+        font-weight: bold;
+        border: 2px solid #b92f94;
+        border-radius: 10px;
+        padding: 5px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .logout-button:hover {
+        background-color: #982d6d;
+    }
+
+    .item-count {
+        background-color: rgba(255, 255, 255, 0.5);
+        color: black;
+        font-weight: bold;
+        border: 2px solid #581c4e;
+        border-radius: 10px;
+        padding: 5px;
+        margin: 50px auto;
+        max-width: 300px;
+        text-align: center;
+    }
+
+    .item-count p {
+        margin: 0;
+    }
+
+    .add-product {
+        margin-top: 60px;
+        margin-bottom: 60px;
+    }
+
+    .pos {
+        display: flex;
+        justify-content: center;
+    }
     
-        .item-cards {
-            margin-top: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-        }
+    .card-container {
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin: 0 auto;
+        gap: 20px;
+        max-width: 1200px;
+    }
+
+    .col-3 {
+        flex: 0 0 33.33%;
+        max-width: 33.33%;
+        box-sizing: border-box;
+        padding: 15px;
+    }
+
+    .product-card {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin: 0 auto;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: box-shadow 0.3s;
+        width: 100%;
+        position: relative;
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .col-3:last-child .product-card {
+        background-color: rgb(220, 102, 166);
+    }
+
+    .product-card:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .amount-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-edit {
+        background: none;
+        border: none;
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 1.5rem;
+        cursor: pointer;
+    }
     
-        .item-card {
-            width: 300px;
-            padding: 20px;
-            padding-bottom: 25px;
-            border: 2px solid #f675a9;
-            border-radius: 10px;
-            background-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 0 4px 8px rgba(46, 6, 26, 0.2);
-            transition: transform 0.2s;
-        }
+    .btn-add {
+        background-color: rgba(239, 12, 125, 0.733);
+        color: rgb(255, 255, 255);
+        font-weight: bold;
+        border: 2px solid rgb(220, 56, 138);
+        border-radius: 10px;
+        padding: auto;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
 
-        .item-category {
-            color: #831341; 
-        }
+    .btn-decrease {
+        background-color: rgb(190, 36, 108);
+        color: rgb(255, 255, 255);
+        font-weight: bold;
+        border: 2px solid rgb(154, 22, 108);
+        border-radius: 10px;
+        padding: auto;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
 
-        .item-category-value {
-             color: #831341; 
-        }
+    .btn-remove {
+        background-color: rgba(114, 23, 63, 0.5);
+        color: rgb(255, 255, 255);
+        font-weight: bold;
+        border: 2px solid rgb(92, 10, 62);
+        border-radius: 10px;
+        padding: auto;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
 
-        .item-card:hover {
-            transform: scale(1.05);
-        }
-    
-        .item-details {
-            text-align: left;
-            margin-top: 10px;
-        }
-    
-        .item-actions {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-        }
-    
-        .item-actions button {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            background-color: #dd3e7e;
-            color:aliceblue
-        }
-    
-        .item-actions button:hover {
-            background-color: #f675a9;
-            color: white;
-        }
+    .btn-add:hover, .btn-decrease:hover, .btn-remove:hover {
+        background-color: #982d6d; 
+    }
+  </style>
+{% endblock meta %}
 
-        .button-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-top: 20px;
-            margin-bottom: 50px; 
-        }
-
-        .add-product-button {
-            text-decoration: none;
-            background-color: #fedeea;
-            font-size: 14px;
-            color: rgb(149, 12, 67);
-            font-weight: bold;
-            border-color: #dd3e7e;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-right: 10px; 
-            transition: background-color 0.2s;
-        }
-
-        .add-product-button:hover {
-            background-color: #fcc9db;
-        }
-
-        .logout-button {
-            text-decoration: none;
-            background-color: #ab124f;
-            color: white;
-            font-size: 14px;
-            padding: 10px 20px;
-            border-radius: 5px;
-            margin-left: 10px; 
-            transition: background-color 0.2s;
-        }
-
-        .logout-button:hover {
-            background-color: #660729;
-        }
-
-        .login-session {
-            font-weight: bold;
-            margin-left: 100px; 
-            color: #740936;
-}
-    </style>
-</head>
-
-<body>
-    <div class="data-app">
-        <h3>{{ creator }}</h3>
-        <h3>{{ id }}</h3>
-        <h3>{{ class }}</h3>
-    </div>
-    <div class="title-container">
-        <h1 class="item-insight-title">Item Insight</h1>
-    </div>
-    <div class="item-count-container">
-        <p class="item-count">Exquisite collection of {{ items_list|length }} floral item(s) stored in this app.</p>
-    </div>
-    
-    <div class="item-cards">
-        {% for item in items_list %}
-        <div class="item-card">
-            <h2>{{ item.name }}</h2>
-            <div class="item-details">
-                <p><strong>Amount:</strong> {{ item.amount }}</p>
-                <p><strong>Description:</strong> {{ item.description }}</p>
-                <p><strong>Price:</strong> {{ item.price }}</p>
-                <p><strong class="item-category">Category:</strong> <span class="item-category-value">{{ item.category }}</span></p>
-            </div>
-            <div class="item-actions">
-                <form action="{% url 'main:increment' item.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" name="Increment">Add</button>
-                </form>
-                <form action="{% url 'main:decrement' item.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" name="Decrement">Decrease</button>
-                </form>
-                <form action="{% url 'main:remove' item.id %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit" name="Remove">Remove</button>
-                </form>
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="header">
+                <h1 class="item-name">
+                    Item <span>Insight</span>
+                </h1>
+                <div class="header-controls">
+                    <div class="last-login">
+                        <h4>Sesi terakhir login: {{ last_login }}</h4>
+                    </div>
+                    <a href="{% url 'main:logout' %}">
+                        <button class="logout-button">Logout</button>
+                    </a>
+                </div>
             </div>
         </div>
-        {% endfor %}
     </div>
-    <h5 class="login-session">Sesi terakhir login: {{ last_login }}</h5>
-    <div class="button-container">
-        <a href="{% url 'main:create_product' %}" class="add-product-button">
-            Add New Product
-        </a>
-        <a href="{% url 'main:logout' %}" class="logout-button">
-            Logout
-        </a>
-</body>
-</html>
+
+    <div class="data-app-container">
+        <div class="data-app">
+            <h3>{{ creator }}</h3>
+            <h3>{{ id }}</h3>
+            <h3>{{ class }}</h3>
+        </div>
+    </div>
+    
+
+    <div class="row">
+      <div class="col-12">
+          <div class="item-count">
+              <p id="ItemCount"></p>
+          </div>
+      </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div id="product_card"></div>
+        </div>
+    </div>
+
+    <div class="pos">
+      <div class="row card-container">
+        <!-- Kode JavaScript akan menempatkan kartu produk di sini -->
+      </div> 
+    </div> 
+
+    <div class="row">
+      <div class="col-12 text-center">
+          <button type="button" class="btn btn-primary add-product" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Item by AJAX</button>
+      </div>
+    </div>
+</div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Product</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="form" onsubmit="return false;">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                      <label for="name" class="col-form-label">Name:</label>
+                      <input type="text" class="form-control" id="name" name="name"></input>
+                  </div>
+                  <div class="mb-3">
+                    <label for="category" class="col-form-label">Category:</label>
+                    <input type="text" class="form-control" id="category" name="category"></input>
+                  </div>
+                  <div class="mb-3">
+                    <label for="amount" class="col-form-label">Amount:</label>
+                    <input type="number" class="form-control" id="amount" name="amount"></input>
+                  </div>
+                  <div class="mb-3">
+                      <label for="price" class="col-form-label">Price:</label>
+                      <input type="number" class="form-control" id="price" name="price"></input>
+                  </div>
+                  <div class="mb-3">
+                      <label for="description" class="col-form-label">Description:</label>
+                      <textarea class="form-control" id="description" name="description"></textarea>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Product</button>
+          </div>
+      </div>
+  </div>
+</div>
+
+<script>
+  async function getProducts() {
+    return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+  }
+
+  async function refreshProducts() {
+    document.getElementById("product_card").innerHTML = ""
+    const products = await getProducts()
+    const itemCount = document.getElementById("ItemCount");
+    const totalItem = products.length;
+    itemCount.innerHTML = `Exquisite collection of ${totalItem} floral item(s) stored in this app`
+    
+    let htmlString = ``
+    products.forEach((item) => {
+    htmlString += `
+      <div class="col-3">
+        <div class="product-card">
+            <h3>${item.fields.name}</h3>
+            <a href="edit-product/${item.pk}">
+              <button class="btn-edit">✏️</button>
+            </a>
+
+            <p>Amount: ${item.fields.amount}</p>
+            <p>Price: IDR ${item.fields.price}</p>
+            <p>Category: ${item.fields.category}</p>
+            <p>Description: ${item.fields.description}</p>
+            <div class="card-footer">
+                <button onclick="addAmount(${item.pk})" class="btn-add">Add</button>
+                <button onclick="decreaseAmount(${item.pk})" class="btn-decrease">Decrease</button>
+                <button onclick="removeItem(${item.pk})" class="btn-remove">Remove</button>
+            </div>
+          </div>
+      </div>`;
+    })
+
+    document.querySelector(".card-container").innerHTML = htmlString;
+  }
+
+  function addProduct() {
+      fetch("{% url 'main:add_product_ajax' %}", {
+          method: "POST",
+          body: new FormData(document.querySelector('#form'))
+      }).then(refreshProducts)
+
+      document.getElementById("form").reset()
+      return false
+  }
+
+  function addAmount(itemId) {
+    fetch(`add-amount/${itemId}/`, {
+          method: "POST",
+      }).then(refreshProducts)
+
+      return false
+  }
+
+  function decreaseAmount(itemId) {
+    fetch(`decrease-amount/${itemId}/`, {
+          method: "POST",
+      }).then(refreshProducts)
+
+      return false
+  }
+
+  function removeItem(itemId) {
+    fetch(`delete-product-ajax/${itemId}/`, {
+          method: "DELETE",
+      }).then(refreshProducts)
+
+      return false
+  }
+  
+  refreshProducts()
+  document.getElementById("button_add").onclick = addProduct
+</script>
+
 {% endblock content %}
