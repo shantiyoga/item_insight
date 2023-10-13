@@ -2455,6 +2455,48 @@ document.getElementById("button_add").onclick = addProduct
 ## Melakukan perintah collectstatic
 Untuk melakukan perintah `collectstatic` untuk mengumpulkan file static dari setiap aplikasi di proyek ini, cukup dengan melakukan perintah `python manage.py collectstatic` pada terminal.
 
+## Bonus: Implementasi AJAX DELETE
+1. Buka file main.html dan tambahkan potongan kode di bawah ini pada tag <script>.
+```
+async function refreshProducts() {
+    ...
+   let htmlString = ``
+    products.forEach((item) => {
+    htmlString += `
+      <div class="col-3">
+        <div class="product-card">
+            <h3>${item.fields.name}</h3>
+            <a href="edit-product/${item.pk}">
+              <button class="btn-edit">✏️</button>
+            </a>
+            <p>Amount: ${item.fields.amount}</p>
+            <p>Description: ${item.fields.description}</p>
+            <p>Price: IDR ${item.fields.price}</p>
+            <p class="category">Category: ${item.fields.category}</p>
+            <div class="card-footer">
+                <button onclick="addAmount(${item.pk})" class="btn-add">Add</button>
+                <button onclick="decreaseAmount(${item.pk})" class="btn-decrease">Decrease</button>
+                <button onclick="removeItem(${item.pk})" class="btn-remove">Remove</button>
+            </div>
+          </div>
+      </div>`;
+    })
+
+    document.querySelector(".card-container").innerHTML = htmlString;
+  }
+  ...
+  
+  // Implementasi AJAX DELETE
+  function removeItem(itemId) {
+    fetch(`delete-product-ajax/${itemId}/`, {
+        method: "DELETE",
+    }).then(refreshProducts)
+
+    return false
+}
+  ```
+
+
 ## Perbedaan Antara *Asynchronous Programming* dengan *Synchronous Programming*
 
 *Asynchronous programming* dan *synchronous programming* adalah dua pendekatan yang berbeda dalam menangani tugas-tugas dan operasi dalam pemrograman. Secara singkat, dapat dijelaskan bahwa pada *asynchronous programming*, tugas atau operasi dapat dieksekusi secara bersamaan sehingga kita tidak perlu menunggu suatu tugas atau operasi selesai dijalankan untuk menjalankan tugas atau operasi lainnya. Sementara itu, pada *synchronous programming* setiap tugas atau operasi dijalankan berurutan sehingga untuk dapat mengeksekusi tugas atau operasi berikutnya maka kita harus menunggu tugas atau operasi sebelumnya selesai.
