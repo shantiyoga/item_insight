@@ -2485,7 +2485,7 @@ async function refreshProducts() {
     document.querySelector(".card-container").innerHTML = htmlString;
   }
   ...
-  
+
   // Implementasi AJAX DELETE
   function removeItem(itemId) {
     fetch(`delete-product-ajax/${itemId}/`, {
@@ -2633,5 +2633,8 @@ Di sisi lain, jika kompatibilitas dengan browser lama atau kebutuhan untuk meman
 
 ### Pendapat Saya:
 Secara pribadi, saya lebih condong kepada Fetch API untuk proyek-proyek baru yang tidak memerlukan kompatibilitas dengan browser lama. Hal ini disebabkan Fetch API memberikan performa yang lebih baik dan kode yang lebih bersih. Namun, untuk proyek yang sudah ada dan membutuhkan kompatibilitas dengan berbagai jenis browser atau proyek yang ingin memanfaatkan plugin dan fitur khusus dari komunitas jQuery, saya akan memilih untuk tetap menggunakan jQuery. 
+
+## Link Deployment
+shanti-yoga-tugas.pbp.cs.ui.ac.i
 
 <br/>
