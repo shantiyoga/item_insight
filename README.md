@@ -2274,6 +2274,187 @@ Penjelasan dapat dilihat dalam tabel berikut.
 <details open>
   <summary>Tugas 6</summary>
 
+## Implementasi AJAX GET
+1. Buat fungsi dengan nama get_product_json di views.py untuk mereturn data JSON.
+```
+def get_product_json(request):
+    product_item = InventoryItem.objects.filter(user=request.user)
+    return HttpResponse(serializers.serialize('json', product_item))
+```
+2. Tambahkan URL function tersebut ke dalam main/urls.py.
+```
+...
+path('get-product/', get_product_json, name='get_product_json'),
+...
+```
+3. Tambahkan script AJAX getter pada templates/main.html untuk mendapatkan item.
+```
+<script>
+    async function getProducts() {
+        return fetch("{% url 'main:get_product_json' %}").then((res) => res.json())
+    }
+</script>
+```
+
+## Implementasi AJAX POST
+1. Membuat modals form dan tombol untuk add item by AJAX.
+```
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Product</h1>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+              <form id="form" onsubmit="return false;">
+                  {% csrf_token %}
+                  <div class="mb-3">
+                      <label for="name" class="col-form-label">Name:</label>
+                      <input type="text" class="form-control" id="name" name="name"></input>
+                  </div>
+                  <div class="mb-3">
+                    <label for="category" class="col-form-label">Category:</label>
+                    <input type="text" class="form-control" id="category" name="category"></input>
+                  </div>
+                  <div class="mb-3">
+                    <label for="amount" class="col-form-label">Amount:</label>
+                    <input type="number" class="form-control" id="amount" name="amount"></input>
+                  </div>
+                  <div class="mb-3">
+                      <label for="price" class="col-form-label">Price:</label>
+                      <input type="number" class="form-control" id="price" name="price"></input>
+                  </div>
+                  <div class="mb-3">
+                      <label for="description" class="col-form-label">Description:</label>
+                      <textarea class="form-control" id="description" name="description"></textarea>
+                  </div>
+              </form>
+          </div>
+          <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" id="button_add" data-bs-dismiss="modal">Add Product</button>
+          </div>
+      </div>
+  </div>
+</div>
+```
+```
+ <button type="button" class="btn btn-primary add-product" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background-color: rgb(173, 3, 114); border-color: rgb(173, 3, 114);">Add Item by AJAX</button>
+ ```
+Saat tombol ditekan akan men-trigger class container modal dan container dengan id exampleModal.
+2. Ubah button add item untuk membuka modal form
+```
+    <div class="row">
+      <div class="col-12 text-center">
+        <button type="button" class="btn btn-primary add-product" data-bs-toggle="modal" data-bs-target="#exampleModal" style="background-color: rgb(173, 3, 114); border-color: rgb(173, 3, 114);">Add Item by AJAX</button>
+      </div>
+    </div>
+```
+3. Tambahkan function add_product_ajax di dalam views.py.
+```
+from django.views.decorators.csrf import csrf_exempt
+...
+@csrf_exempt
+def add_product_ajax(request):
+    if request.method == 'POST':
+        name = request.POST.get("name")
+        amount = request.POST.get("amount")
+        description = request.POST.get("description")
+        price = request.POST.get("price")
+        category = request.POST.get("category")
+        user = request.user
+
+        new_product = ItemStore(name=name, amount=amount, description=description, price=price, category=category, user=user)
+        new_product.save()
+
+        return HttpResponse(b"CREATED", status=201)
+
+    return HttpResponseNotFound()
+```
+4. Tambahkan URL untuk add_product_ajax dalam main/urls.py.
+```
+from main.views import add_product_ajax
+
+urlpatterns = [
+    ...
+    path('create-ajax/', add_product_ajax, name='add_product_ajax'),
+]
+...
+```
+
+5. Membuat script AJAX untuk add item pada templates/main.html
+```
+  function addProduct() {
+      fetch("{% url 'main:add_product_ajax' %}", {
+          method: "POST",
+          body: new FormData(document.querySelector('#form'))
+      }).then(refreshProducts)
+
+      document.getElementById("form").reset()
+      return false
+}
+document.getElementById("button_add").onclick = addProduct
+```
+
+## Melakukan refresh halaman utama secara asinkronus untuk menampilkan daftar item terbaru tanpa reload halaman utama secara keseluruhan
+1. Tambahkan script AJAX untuk menampilkan item sekaligus refresh
+```
+<script>
+    ...
+    async function refreshProducts() {
+        document.getElementById("product_card").innerHTML = ""
+        const products = await getProducts()
+        const itemCount = document.getElementById("ItemCount");
+        const totalItem = products.length;
+        itemCount.innerHTML = `Exquisite collection of ${totalItem} floral item(s) stored in this app`
+        
+        let htmlString = ``
+        products.forEach((item) => {
+        htmlString += `
+        <div class="col-3">
+            <div class="product-card">
+                <h3>${item.fields.name}</h3>
+                <a href="edit-product/${item.pk}">
+                <button class="btn-edit">✏️</button>
+                </a>
+                <p>Amount: ${item.fields.amount}</p>
+                <p>Description: ${item.fields.description}</p>
+                <p>Price: IDR ${item.fields.price}</p>
+                <p class="category">Category: ${item.fields.category}</p>
+                <div class="card-footer">
+                    <button onclick="addAmount(${item.pk})" class="btn-add">Add</button>
+                    <button onclick="decreaseAmount(${item.pk})" class="btn-decrease">Decrease</button>
+                    <button onclick="removeItem(${item.pk})" class="btn-remove">Remove</button>
+                </div>
+            </div>
+        </div>`;
+        })
+
+        document.querySelector(".card-container").
+    ...
+  }
+
+  ...
+  
+  refreshProducts()
+  ...
+```
+
+2. Saat memanggil function addProduct() pastikan setelah memproses data dari query form akan memanggil function refreshProduct().
+```
+  function addProduct() {
+      fetch("{% url 'main:add_product_ajax' %}", {
+          method: "POST",
+          body: new FormData(document.querySelector('#form'))
+      }).then(refreshProducts)
+    ...
+  }
+```
+
+## Melakukan perintah collectstatic
+Untuk melakukan perintah `collectstatic` untuk mengumpulkan file static dari setiap aplikasi di proyek ini, cukup dengan melakukan perintah `python manage.py collectstatic` pada terminal.
+
 ## Perbedaan Antara *Asynchronous Programming* dengan *Synchronous Programming*
 
 *Asynchronous programming* dan *synchronous programming* adalah dua pendekatan yang berbeda dalam menangani tugas-tugas dan operasi dalam pemrograman. Secara singkat, dapat dijelaskan bahwa pada *asynchronous programming*, tugas atau operasi dapat dieksekusi secara bersamaan sehingga kita tidak perlu menunggu suatu tugas atau operasi selesai dijalankan untuk menjalankan tugas atau operasi lainnya. Sementara itu, pada *synchronous programming* setiap tugas atau operasi dijalankan berurutan sehingga untuk dapat mengeksekusi tugas atau operasi berikutnya maka kita harus menunggu tugas atau operasi sebelumnya selesai.
@@ -2294,70 +2475,99 @@ Perbedaan lebih jelas dapat dilihat dalam tabel berikut.
 
 ## Dalam Penerapan JavaScript dan AJAX, Terdapat Penerapan Paradigma *Event-Driven Programming*. Penjelasan Maksud dari Paradigma Tersebut dan  Salah Satu Contoh Penerapannya pada Tugas Ini.
 
-Event-driven programming merupakan suatu metode pemrograman yang alur programnya ditentukan oleh peristiwa-peristiwa yang terjadi. Artinya, rogram menunggu terjadinya suatu peristiwa sebelum melanjutkan eksekusi. Hal ini memungkinkan program yang lebih responsif karena tidak perlu menjalankan kode secara terus-menerus. Program akan menunggu sampai sesuatu terjadi dan kemudian memberikan respons yang sesuai.
+Event-driven programming merupakan suatu metode pemrograman yang alur programnya ditentukan oleh peristiwa-peristiwa yang terjadi. Artinya, program menunggu terjadinya suatu peristiwa sebelum melanjutkan eksekusi. Hal ini memungkinkan program yang lebih responsif karena tidak perlu menjalankan kode secara terus-menerus. Program akan menunggu sampai sesuatu terjadi dan kemudian memberikan respons yang sesuai.
 
-Penjelasan lebih rinci tentang paradigma Event-Driven Programming adalah sebagai berikut:
+Dalam tugas ini, contoh penerapan paradigma *event-driven programming* terdapat pada main.html sebagai berikut
+```
+<script>
+  ...
 
-1. Peristiwa (Events)
-Peristiwa adalah tindakan atau kondisi tertentu yang terjadi dalam program atau aplikasi. Contohnya, dalam pengembangan web, peristiwa bisa mencakup klik tombol mouse, pengiriman formulir, atau menerima respons dari server setelah permintaan data. Dalam paradigma ini, peristiwa menjadi fokus utama.
+  // Fungsi untuk menambahkan produk baru ketika tombol "Add Product" diklik
+  function addProduct() {
+      fetch("{% url 'main:add_product_ajax' %}", {
+          method: "POST",
+          body: new FormData(document.querySelector('#form'))
+      }).then(refreshProducts)
 
-2. Pendengar (Event Listeners)
-Dalam Event-Driven Programming, perlu mendefinisikan fungsi-fungsi yang akan dipanggil ketika peristiwa tertentu terjadi. Fungsi-fungsi ini disebut "event listeners" atau "event handlers". Fungsi ini akan menangani peristiwa tertentu dan menjalankan kode yang sesuai.
+      document.getElementById("form").reset()
+      return false
+  }
 
-3. Asinkronus
-Dalam Event-Driven Programming, peristiwa dalam aplikasi web terjadi secara asinkron (misalnya, permintaan AJAX yang mengambil waktu untuk merespons), paradigma Event-Driven memungkinkan program untuk menjalankan tugas lain tanpa harus menunggu peristiwa tertentu selesai. Hal ini dapat meningkatkan responsivitas dan efisiensi aplikasi.
+    ... 
 
-4. Callback Functions
-Dalam JavaScript, callback functions adalah cara umum untuk menangani peristiwa. Kita dapat mengaitkan fungsi tertentu dengan peristiwa, dan fungsi ini akan dijalankan ketika peristiwa tersebut terjadi. Hal ini memungkinkan program merespons secara dinamis terhadap tindakan pengguna atau hasil peristiwa lainnya.
+  // Event listener yang menghubungkan fungsi addProduct ke tombol "Add Product"
+
+  document.getElementById("button_add").onclick = addProduct
+
+  ...
+</script>
+```
+
+Dalam potongan kode di atas, ketika pengguna mengklik tombol "Add Product," event listener ini akan memanggil fungsi addProduct(), yang kemudian akan mengirim permintaan POST untuk menambahkan produk baru melalui AJAX. Hal ini adalah contoh dari bagaimana event-driven programming memungkinkan aplikasi untuk merespons tindakan pengguna secara asinkron dan mengupdate tampilan aplikasi tanpa perlu me-refresh halaman.
 
 ## Penjelasan Penerapan *Asynchronous Programming* pada AJAX.
 
 Asynchronous programming dalam konteks AJAX (Asynchronous JavaScript and XML) mengacu pada kemampuan JavaScript untuk mengirim permintaan ke server web dan menerima respon dari server tanpa menghentikan eksekusi kode JavaScript utama. Dengan kata lain, kita dapat menjalankan kode JavaScript lainnya sambil menunggu respon dari server, sehingga pengguna tidak mengalami penundaan atau penguncian antarmuka pengguna (UI). 
 
-Berikut adalah penjelasan tentang bagaimana asynchronous programming diterapkan dalam AJAX:
+Berikut adalah cara asynchronous programming diterapkan pada AJAX:
+1. Menggunakan Objek XMLHttpRequest atau Fetch API
+Dalam pemrograman asinkron dengan AJAX, kita dapat menggunakan objek XMLHttpRequest atau Fetch API  untuk mengirim permintaan ke server serta menerima respons.
+Contoh penggunaan Objek XMLHttpRequest:
 
-1. **Menggunakan Objek XMLHttpRequest**
-   AJAX menggunakan objek XMLHttpRequest (XHR) untuk berkomunikasi dengan server secara asynchronous. Objek XHR memungkinkan Anda untuk mengirim permintaan ke server dan menerima respons tanpa harus memuat ulang halaman web.
+```
+// Inisialisasi objek XMLHttpRequest
+var xhr = new XMLHttpRequest();
 
-2. **Menginisiasi Permintaan**
-   Pertama, kita perlu membuat instance objek XMLHttpRequest:
+// Mengatur konfigurasi request
+xhr.open('GET', 'https://api.example.com/data', true);
 
-   ```javascript
-   var xhr = new XMLHttpRequest();
-   ```
+// Menetapkan event handler untuk respons yang diterima
+xhr.onreadystatechange = function() {
+  if (xhr.readyState === 4 && xhr.status === 200) {
+    var data = JSON.parse(xhr.responseText);
+    console.log('Data dari server:', data);
+  }
+};
 
-3. **Mengatur Fungsi Callback**:
-   Selanjutnya, kita perlu mendefinisikan fungsi callback yang akan dipanggil saat respons dari server diterima. Hal ini adalah bagian utama dari asynchronous programming. Kita dapat mengatur fungsi ini sebagai handler untuk event `onreadystatechange`:
+// Mengirimkan request
+xhr.send();
+```
 
-   ```javascript
-   xhr.onreadystatechange = function () {
-       if (xhr.readyState === 4 && xhr.status === 200) {
-           // Tindakan yang akan diambil setelah menerima respons dari server
-           var response = xhr.responseText;
-           // Lakukan sesuatu dengan respons, misalnya memperbarui tampilan
-       }
-   };
-   ```
+2. Menggunakan Callback, Promise, atau async/await
+Kita dapat menggunakan callback, promise, atau async/await untuk mengelola respons dari server dan menghindari antarmuka pengguna yang tidak responsif.
 
-   Dalam fungsi ini, kita dapat mengecek status `readyState` objek XHR untuk memastikan respons sudah siap dan status HTTP `status` untuk memastikan respons berhasil.
+Contoh penggunaan Callback:
+```
+// Fungsi untuk mengambil data dari server
+function ambilData(dariCallback) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://api.example.com/data', true);
 
-4. **Mengirim Permintaan HTTP**:
-   Setelah objek XHR diinisiasi dan handler callback diatur, kita mengirim permintaan ke server menggunakan metode `open` dan `send`:
+  xhr.onreadystatechange = function() {
+    // Periksa apakah permintaan selesai dan sukses
+    if (xhr.readyState === 4 && xhr.status === 200) {
+      // Panggil fungsi callback dengan data yang diterima
+      dariCallback(JSON.parse(xhr.responseText));
+    }
+  };
 
-   ```javascript
-   xhr.open('GET', 'https://example.com/data', true); // true untuk asynchronous
-   xhr.send();
-   ```
+  // Kirim permintaan
+  xhr.send();
+}
 
-   Parameter ketiga dalam metode `open` diatur menjadi `true` untuk menjalankan permintaan secara asynchronous.
+// Fungsi callback yang akan dijalankan setelah data diterima
+function tampilkanData(data) {
+  console.log('Data diterima:', data);
+}
 
-5. **Melakukan Tindakan Setelah Menerima Respons**:
-   Ketika server mengirim respons, fungsi callback yang telah diatur sebelumnya akan dipanggil, dan kita dapat melakukan tindakan yang diperlukan dengan respons, seperti memperbarui elemen HTML di halaman atau memproses data.
+// Memanggil fungsi ambilData dan meneruskan tampilkanData sebagai callback
+ambilData(tampilkanData);
+```
 
-6. **Error Handling**:
-   Pastikan juga untuk menambahkan penanganan kesalahan (error handling) dalam fungsi callback untuk mengatasi potensi masalah, seperti jika respons dari server tidak sesuai dengan yang diharapkan.
+Dalam pemrograman asinkron, eksekusi kode tidak perlu menunggu balasan dari server untuk berlanjut. Ini memastikan bahwa antarmuka pengguna tetap responsif saat data server sedang diunduh dan diproses di latar belakang. Setelah data dari server berhasil diakses, kita bisa mengubah DOM atau melakukan aksi-aksi lain berdasarkan data tersebut.
 
-Asynchronous programming pada AJAX memungkinkan aplikasi web untuk berfungsi secara responsif, karena tidak perlu menunggu respons server selesai sebelum melanjutkan eksekusi kode JavaScript.
+
+Asynchronous programming pada AJAX memungkinkan aplikasi web untuk berfungsi secara responsif, karena tidak perlu dihentikan untuk menunggu respons server selesai sebelum melanjutkan eksekusi. Setelah menerima data dari server, kita bisa melakukan perubahan pada DOM atau melakukan aksi-aksi lain berdasarkan data yang kita terima.
 
 ## Pada PBP kali ini, Penerapan AJAX Dilakukan dengan Menggunakan Fetch API daripada Library jQuery. Perbandingan Kedua Teknologi Tersebut dan  Pendapat Saya Terkait Teknologi Mana yang Lebih Baik untuk Digunakan
 
@@ -2373,6 +2583,13 @@ Perbandingan kedua teknologi tersebut dijelaskan daam tabel berikut.
 | **Ukuran**             | Lebih ringan, karena tidak perlu mengunduh library eksternal tambahan | Lebih besar karena jQuery adalah library eksternal yang harus diunduh dan dimuat sebelum digunakan. |
 | **Pengembangan Web**   | Sesuai dengan tren pengembangan web modern yang mendorong penggunaan standar web API | Memiliki sejarah panjang dalam pengembangan web, tetapi kurang relevan dalam pengembangan web modern. |
 
-Kedua teknologi tersebut memiliki keunggulan dan kekurangannya masing masing. Pemilihan mana yang lebih baik antara keduanya tergantung pada kebutuhan masing-masing. Meskipun demikian, menurut saya, jQuery lebih baik untuk digunakan. Hal ini disebabkkan jQuery dirancang untuk menyederhanakan tugas umum dalam pengembangan web, termasuk AJAX. jQuery sangat cocok untuk pemula yang ingin memahami konsep dasar AJAX tanpa harus menulis banyak kode JavaScript murni. jQuery juga memungkinkan penulisan kode yang lebih singkat dan sederhana daripada Fetch API. Selain itu,  jQuery masih kompatibel dengan hampir semua browser yang digunakan di seluruh dunia dan memiliki banyak plugin yang dapat meningkatkan fungsionalitasnya.  
+Kedua teknologi tersebut memiliki keunggulan dan kekurangannya masing masing. Pemilihan mana yang lebih baik antara keduanya tergantung pada kebutuhan masing-masing. 
+
+Jika efisiensi dan independensi dari library eksternal menjadi prioritas, Fetch API menawarkan solusi yang lebih ringan dan modern. Dengan basis kode yang lebih sederhana dan terfokus, Fetch API memudahkan pengembangan dan pemeliharaan aplikasi. Dalam hal ini, Fetch API memberikan pendekatan yang lebih native dan berdasarkan fitur-fitur terkini dari JavaScript modern, seperti `async/await` dan Promises, yang membuat kode lebih mudah dibaca dan dikelola.
+
+Di sisi lain, jika kompatibilitas dengan browser lama atau kebutuhan untuk memanfaatkan struktur dan plugin yang sudah ada adalah fokus utama, maka jQuery menjadi pilihan yang tepat. jQuery telah lama ada di industri dan mendukung berbagai macam browser, termasuk yang lebih tua. Dengan komunitas yang besar dan dokumentasi yang lengkap, akan membuat lebih mudah menemukan solusi atau memanfaatkan plugin yang tersedia.
+
+### Pendapat Saya:
+Secara pribadi, saya lebih condong kepada Fetch API untuk proyek-proyek baru yang tidak memerlukan kompatibilitas dengan browser lama. Hal ini disebabkan Fetch API memberikan performa yang lebih baik dan kode yang lebih bersih. Namun, untuk proyek yang sudah ada dan membutuhkan kompatibilitas dengan berbagai jenis browser atau proyek yang ingin memanfaatkan plugin dan fitur khusus dari komunitas jQuery, saya akan memilih untuk tetap menggunakan jQuery. 
 
 <br/>
