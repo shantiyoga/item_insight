@@ -129,18 +129,6 @@ def add_product_ajax(request):
 
     return HttpResponseNotFound()
 
-def register(request):
-    form = UserCreationForm()
-
-    if request.method == "POST":
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your account has been successfully created!')
-            return redirect('main:login')
-    context = {'form':form}
-    return render(request, 'register.html', context)
-
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -162,6 +150,17 @@ def logout_user(request):
     response.delete_cookie('last_login')
     return response
 
+def register(request):
+    form = UserCreationForm()
+
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Your account has been successfully created!')
+            return redirect('main:login')
+    context = {'form':form}
+    return render(request, 'register.html', context)
 
 @csrf_exempt
 def create_product_flutter(request):
